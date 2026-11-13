@@ -90,48 +90,17 @@ export function pickRandomSolScenario(excludeId?: MarsSolId): MarsSolScenario {
 export const MISSION_TRADE_OFFS: Record<MissionId, MissionTradeOffOption[]> = {
   mission_1: [
     {
-      id: 'm1_heavy_shield',
-      missionId: 'mission_1',
-      title: 'Super Ray Shield Suit',
-      badge: 'SHIELDING',
-      gainText: 'Blocks half of space rays and dust hits on your suit and rover!',
-      costText: 'Heavy armor makes you use Suit Air 25% faster outside.',
-      realScienceNote:
-        'Adding radiation shielding layers makes spacesuits heavier, so astronauts work harder and breathe oxygen faster.',
-      effects: {
-        shieldingDrainMultiplier: 0.45,
-        oxygenDrainMultiplier: 1.25,
-      },
-    },
-    {
-      id: 'm1_greenhouse_food',
-      missionId: 'mission_1',
-      title: 'Space Veggie Garden',
-      badge: 'FOOD & AIR',
-      gainText: 'Greenhouse plants refill Suit Air 45% faster at base + give +25 Science Points!',
-      costText: 'Grow lights borrow power, so Rover Battery starts at 78% instead of 100%.',
-      realScienceNote:
-        'NASA Veggie & Advanced Plant Habitat show fresh crops turn breath into fresh oxygen, but need electric grow lights in dim Mars sunlight.',
-      effects: {
-        oxygenDrainMultiplier: 0.85,
-        baseAirRefillMultiplier: 1.45,
-        startingBattery: 78,
-        bonusScienceScore: 25,
-      },
-    },
-    {
       id: 'm1_auto_relay_power',
       missionId: 'mission_1',
       title: 'Smart Auto-Radio',
       badge: 'RADIO & POWER',
-      gainText: 'Fixes the radio tower 35% faster without waiting for Earth + saves 25% Battery!',
-      costText: 'Lighter rover frame gives 25% less protection from space rays and rocks.',
+      gainText: 'Makes the radio signal easier to tune and uses 25% less Rover Battery while driving.',
+      costText: 'The lighter rover frame loses Condition 25% faster from space rays and rock bumps.',
       realScienceNote:
         'Because radio messages take about 3 to 22 minutes each way, NASA builds smart onboard computers so rovers do not wait for Earth.',
       effects: {
         batteryDrainMultiplier: 0.75,
         shieldingDrainMultiplier: 1.25,
-        repairSpeedMultiplier: 1.35,
       },
     },
   ],

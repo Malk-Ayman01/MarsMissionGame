@@ -28,7 +28,14 @@ interface EventConfig {
   autoPreviewDurationSec?: number;
 }
 
-
+/**
+ * DEVELOPER VIDEO PLACEHOLDERS:
+ * Drop .mp4 event videos into public/assets/cinematic/:
+ *  - Mission 1 Big Event:       public/assets/cinematic/mission1_event.mp4
+ *  - Mission 2 Big Event:       public/assets/cinematic/mission2_event.mp4
+ *  - Mission 3 Big Event:       public/assets/cinematic/mission3_event.mp4
+ *  - Mission 3 Return Home End: public/assets/cinematic/mission3_final_home.mp4
+ */
 const EVENT_CONFIGS: Record<CinematicEventType, EventConfig> = {
   mission_1_explosion: {
     badge: 'ARES-1 EMERGENCY // SUDDEN SHIP EVENT',
@@ -193,16 +200,6 @@ export const DisasterCinematicModal: React.FC<DisasterCinematicModalProps> = ({
   const isShowingPlaceholder = !isCheckingVideo && (!currentClipSrc || videoLoadError);
   const isAutoPlayingFinalFallback =
     eventType === 'mission_3_final_home' && isShowingPlaceholder;
-
-  // Mission 3 has no videos: skip its cutscenes instantly
-  useEffect(() => {
-    if (
-      isShowingPlaceholder &&
-      (eventType === 'mission_3_launch_crisis' || eventType === 'mission_3_final_home')
-    ) {
-      onCompleteRef.current();
-    }
-  }, [isShowingPlaceholder, eventType]);
 
   useEffect(() => {
     if (!isAutoPlayingFinalFallback || !cfg.autoPreviewDurationSec) return;

@@ -56,84 +56,6 @@ type GameScreenState =
 
 const COMPLETED_STORAGE_KEY = 'mars_mission_completed_v1';
 
-// -------------  MODIFIED PART ------------
-type Mission2QuizQuestion = {
-  id: string;
-  question: string;
-  options: string[];
-  correctAnswer: number;
-  explanation: string;
-};
-
-const MISSION_2_QUIZ: Record<string, Mission2QuizQuestion> = {
-  rimfax: {
-    id: 'rimfax',
-    question: 'What does the RIMFAX sensor do?',
-    options: [
-      'It sends radar signals underground to reveal hidden layers.',
-      'It measures the astronaut’s heart rate.',
-      'It produces oxygen from rocks.',
-    ],
-    correctAnswer: 0,
-    explanation:
-      'RIMFAX sends radar signals into the ground to help reveal what is hidden beneath the surface.',
-  },
-
-  sensors: {
-    id: 'sensors',
-    question: 'Why do we need Sensor 2 after placing Sensor 1?',
-    options: [
-      'To recharge the Rover battery.',
-      'The two sensor readings help locate a hidden underground lava cave.',
-      'To send the rock sample back to Earth.',
-    ],
-    correctAnswer: 1,
-    explanation:
-      'The two sensor pings work together to help identify the hidden cave.',
-  },
-
-  cave: {
-    id: 'cave',
-    question: 'Why is the lava cave a safer place during the mission?',
-    options: [
-      'Its thick rock helps block about 95% of harmful space rays.',
-      'It makes the Rover move faster.',
-      'It produces sunlight for the crew.',
-    ],
-    correctAnswer: 0,
-    explanation:
-      'The cave’s thick rock provides shielding from much of the harmful space radiation.',
-  },
-
-  sample: {
-    id: 'sample',
-    question: 'Why is Rock Tube #14 stored in a clean titanium tube?',
-    options: [
-      'To make it heavier.',
-      'To keep the sample from being contaminated.',
-      'To protect it from sunlight only.',
-    ],
-    correctAnswer: 1,
-    explanation:
-      'The sample is sealed in a clean container to help prevent contamination.',
-  },
-
-  marsquake: {
-    id: 'marsquake',
-    question: 'What should the crew do when a Marsquake starts?',
-    options: [
-      'Stay beside the drill.',
-      'Drive deeper into the cave.',
-      'Run toward the blue Cave Exit circle.',
-    ],
-    correctAnswer: 2,
-    explanation:
-      'The mission tells the crew to escape falling rocks and reach the blue Cave Exit.',
-  },
-};
-
-// -------------------------
-
 function loadCompletedMissions(): MissionId[] {
   try {
     const raw = window.localStorage.getItem(COMPLETED_STORAGE_KEY);
@@ -189,38 +111,6 @@ export default function App() {
   const [interactionPrompt, setInteractionPrompt] = useState<string | null>(null);
   const [warningMessage, setWarningMessage] = useState<string | null>(null);
 
-  // -------------- MODIFIED PART -------------
-  const [mission2TermPopup, setMission2TermPopup] = useState<{
-  id: string;
-  title: string;
-  explanation: string;
-} | null>(null);
-
-const [pendingMission2QuizId, setPendingMission2QuizId] =
-  useState<string | null>(null);
-
-const [activeMission2QuizId, setActiveMission2QuizId] =
-  useState<string | null>(null);
-
-const [selectedMission2Answer, setSelectedMission2Answer] =
-  useState<number | null>(null);
-
-const [mission2QuizResults, setMission2QuizResults] = useState<
-  { quizId: string; selectedAnswer: number; correct: boolean }[]
->([]);
-
-const activeMission2Quiz = activeMission2QuizId
-  ? MISSION_2_QUIZ[activeMission2QuizId] ?? null
-  : null;
-
-const activeMission2QuizResult = activeMission2Quiz
-  ? mission2QuizResults.find(
-      (result) => result.quizId === activeMission2Quiz.id
-    )
-  : undefined;
-
-  // -----------------------
-
   const [isPaused, setIsPaused] = useState(false);
   const [isFieldGuideOpen, setIsFieldGuideOpen] = useState(false);
   const [isBreakerConsoleOpen, setIsBreakerConsoleOpen] = useState(false);
@@ -248,7 +138,11 @@ const activeMission2QuizResult = activeMission2Quiz
   }, []);
 
   const activeSolScenario: MarsSolScenario = React.useMemo(() => {
-    if (replaySolOverride) return replaySolOverride;
+    if (replaySolOverride) {
+      return activeMission === 'mission_1'
+        ? { ...replaySolOverride, solLabel: `SIMULATED MARS WEATHER · ${replaySolOverride.title}` }
+        : replaySolOverride;
+    }
 
     const base =
       spaceWeather?.severity === 'HIGH'
@@ -257,18 +151,25 @@ const activeMission2QuizResult = activeMission2Quiz
         ? getSolScenarioById('sol_288_dusty')
         : getSolScenarioById('sol_142_clear');
 
-    if (!spaceWeather) return base;
+    if (!spaceWeather) {
+      return activeMission === 'mission_1'
+        ? { ...base, solLabel: `SIMULATED MARS WEATHER · ${base.title}` }
+        : base;
+    }
     const radMsv = spaceWeather.solarRadiationMsvDay ?? base.radiationMsvPerDay;
     const scaledShieldDrain = Number(
       (0.08 * Math.max(0.8, Math.min(4.5, radMsv / 0.64))).toFixed(3)
     );
+    const mission1WeatherLabel = `SIMULATED MARS WEATHER · ${base.title}`;
     return {
       ...base,
       radiationMsvPerDay: radMsv,
       shieldingDrainPerSec: scaledShieldDrain,
-      solLabel: `${base.solLabel.split(' · ')[0]} · ${spaceWeather.stormTitle}`,
+      solLabel: activeMission === 'mission_1'
+        ? `${mission1WeatherLabel} · ${spaceWeather.stormTitle}`
+        : `${base.solLabel.split(' · ')[0]} · ${spaceWeather.stormTitle}`,
     };
-  }, [spaceWeather, replaySolOverride]);
+  }, [spaceWeather, replaySolOverride, activeMission]);
 
   const gameRef = useRef<{
     resetMission: (waitForPlan?: boolean) => void;
@@ -313,7 +214,6 @@ const activeMission2QuizResult = activeMission2Quiz
     if (warningTimeoutRef.current) clearTimeout(warningTimeoutRef.current);
     warningTimeoutRef.current = setTimeout(() => {
       setWarningMessage(null);
- 
     }, 4000);
   }, []);
 
@@ -400,22 +300,6 @@ const activeMission2QuizResult = activeMission2Quiz
       setActiveDialogue(null);
       setIsMission2PlanOpen(true);
     },
-
-    // ------------- MODIFIED PART ------------
-  onMission2TermLearned: (term) => {
-  console.log('[Mission 2] Term received in App:', term);
-  setMission2TermPopup(term);
-},
-
-onMission2QuizRequested: (quizId) => {
-  console.log('[Mission 2] Quiz requested:', quizId);
-
-  if (activeMission === 'mission_2' && MISSION_2_QUIZ[quizId]) {
-    setPendingMission2QuizId(quizId);
-  }
-},
-
-    // -------------------
     onTriggerDisasterCinematic: (eventType: CinematicEventType = 'mission_1_explosion') => {
       isReplayingCutsceneRef.current = false;
       setActiveDialogue(null);
@@ -424,37 +308,6 @@ onMission2QuizRequested: (quizId) => {
       setActiveEventCinematic(eventType);
     },
   };
-
-  // ------------- MODIFIED PART ------------
-    // Mission 2: Show a pending quiz when all other overlays are closed.
-  React.useEffect(() => {
-    if (
-      screenState !== 'playing' ||
-      activeMission !== 'mission_2' ||
-      pendingMission2QuizId === null ||
-      activeDialogue !== null ||
-      mission2TermPopup !== null
-    ) {
-      return;
-    }
-
-    if (!MISSION_2_QUIZ[pendingMission2QuizId]) {
-      setPendingMission2QuizId(null);
-      return;
-    }
-
-    setActiveMission2QuizId(pendingMission2QuizId);
-    setPendingMission2QuizId(null);
-    setSelectedMission2Answer(null);
-  }, [
-    screenState,
-    activeMission,
-    pendingMission2QuizId,
-    activeDialogue,
-    mission2TermPopup,
-  ]);
-
-  //-----------------
 
   const resetUiForMissionStart = (
     missionId: MissionId,
@@ -479,15 +332,6 @@ onMission2QuizRequested: (quizId) => {
     setFactQueue([]);
     setInteractionPrompt(null);
     setWarningMessage(null);
-
-         // -------- MODIFIED PART ----------
-      setMission2TermPopup(null);
-
-      setPendingMission2QuizId(null);
-setActiveMission2QuizId(null);
-setSelectedMission2Answer(null);
-setMission2QuizResults([]);
-      // --------------
     setStage(
       missionId === 'mission_3'
         ? 'm3_stage_1_grid_triage'
@@ -578,14 +422,6 @@ setMission2QuizResults([]);
     setActiveEventCinematic(null);
     setIsDamagedStatusOpen(false);
     setActiveDialogue(null);
-    // ---------- MODIFIED PART ----------
-    setMission2TermPopup(null);
-    setPendingMission2QuizId(null);
-setActiveMission2QuizId(null);
-setSelectedMission2Answer(null);
-setMission2QuizResults([]);
-
-    // ----------------
     setFactQueue([]);
     setScreenState('menu');
   };
@@ -597,11 +433,6 @@ setMission2QuizResults([]);
     }
     const shouldPauseScene = Boolean(
       activeEducationalFact ||
-      // ------ MODIFIED PART --------
-      activeMission2QuizId ||
-          mission2TermPopup ||
-
-      // ------------
         isPaused ||
         isBreakerConsoleOpen ||
         isRadioMiniGameOpen ||
@@ -618,11 +449,6 @@ setMission2QuizResults([]);
   }, [
     screenState,
     activeEducationalFact,
-
-    // ---------MODIFIED PART --------
-    mission2TermPopup,
-activeMission2QuizId,
-    // --------------
     isPaused,
     isBreakerConsoleOpen,
     isRadioMiniGameOpen,
@@ -640,10 +466,6 @@ activeMission2QuizId,
     const handleKeyDown = (e: KeyboardEvent) => {
       if (
         screenState !== 'playing' ||
-        // ----------MODIFIED PART ----------
-        activeMission2QuizId !== null ||
-
-        // ------------
         activeEventCinematic !== null ||
         isDamagedStatusOpen ||
         isCrewHealthModalOpen ||
@@ -671,9 +493,6 @@ activeMission2QuizId,
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [
     screenState,
-    // ------------ MODIFIED PART ----------
- activeMission2QuizId,
-    //-------------
     isBreakerConsoleOpen,
     isRadioMiniGameOpen,
     isDrillMiniGameOpen,
@@ -698,7 +517,6 @@ activeMission2QuizId,
     hasCoreSample: resources.hasCoreSample,
     solScenario: activeSolScenario,
     tradeOffTitle: resources.tradeOffTitle,
-        tradeOffChoice: MISSION_TRADE_OFFS[activeMission]?.find((t) => t.id === resources.tradeOffId),
     breakerChoice: resources.breakerChoice,
     m1StormChoice: resources.m1StormChoice,
     m2DrillChoice: resources.m2DrillChoice,
@@ -719,7 +537,7 @@ activeMission2QuizId,
         ? 'Drive inside the pressurized Rover instead of walking so you save Suit Air!'
         : opt.id === 'm1_greenhouse_food'
         ? 'Pick up glowing Yellow Solar Cells in the desert to top up your Rover Battery!'
-        : 'Steer cleanly around boulders to protect your lighter Shielding!',
+        : 'Steer around boulders to help your rover keep its Condition!',
     nasaScienceNote: opt.realScienceNote,
   }));
 
@@ -773,15 +591,10 @@ activeMission2QuizId,
 
   const isOverlayBlockingHud =
     activeEventCinematic !== null ||
-
-    // ----------- MODIFIED PART -------------
-activeMission2QuizId !== null ||
-    // ---------------
     isDamagedStatusOpen ||
     isMission1RoverPlanOpen ||
     isMission2PlanOpen ||
     isMission3LaunchModalOpen;
-
 
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-[#0c0706] font-display crt-overlay">
@@ -881,10 +694,6 @@ activeMission2QuizId !== null ||
               blockSpaceKey={stage === 'm3_stage_4_mav_ascent'}
               paused={Boolean(
                 activeEducationalFact ||
-                // -----------MODIFIED PART -------
-                  mission2TermPopup ||
-                  activeMission2QuizId ||
-                //------------
                   isBreakerConsoleOpen ||
                   isRadioMiniGameOpen ||
                   isDrillMiniGameOpen ||
@@ -911,148 +720,6 @@ activeMission2QuizId !== null ||
               onClose={() => setFactQueue((prev) => prev.slice(1))}
             />
           )}
-
-          {/* ----------- MODIFIED PART ------------- */}
-
-          {mission2TermPopup &&
-  screenState === 'playing' &&
-  activeMission === 'mission_2' && (
-    <div className="absolute inset-0 z-[80] flex items-center justify-center bg-black/75 p-4">
-      <div className="w-full max-w-lg rounded-2xl border-2 border-cyan-400 bg-slate-950 p-6 text-center shadow-2xl">
-        <div className="mb-3 text-sm font-bold tracking-[0.25em] text-cyan-300">
-          NEW SCIENCE TERM
-        </div>
-
-        <h2 className="mb-4 text-3xl font-black text-white">
-          {mission2TermPopup.title}
-        </h2>
-
-        <p className="mb-6 text-base leading-relaxed text-slate-200">
-          {mission2TermPopup.explanation}
-        </p>
-
-        <button
-          type="button"
-          onClick={() => setMission2TermPopup(null)}
-          className="rounded-xl bg-cyan-400 px-8 py-3 font-black text-slate-950 transition hover:bg-cyan-300"
-        >
-          Got it! Continue Mission
-        </button>
-      </div>
-    </div>
-  )}
-
-
-  {activeMission2Quiz &&
-  screenState === 'playing' &&
-  activeMission === 'mission_2' && (
-    <div className="absolute inset-0 z-[90] flex items-center justify-center bg-black/80 p-4">
-      <div className="w-full max-w-xl rounded-2xl border-2 border-cyan-400 bg-slate-950 p-6 text-center shadow-2xl">
-
-        <div className="mb-3 text-xs font-bold tracking-[0.25em] text-cyan-300">
-          MISSION 2 KNOWLEDGE CHECK
-        </div>
-
-        <h2 className="mb-6 text-xl font-black leading-relaxed text-white">
-          {activeMission2Quiz.question}
-        </h2>
-
-        <div className="mb-5 flex flex-col gap-3">
-          {activeMission2Quiz.options.map((option, index) => {
-            const isSelected = selectedMission2Answer === index;
-            const isCorrect = activeMission2Quiz.correctAnswer === index;
-            const hasAnswered = Boolean(activeMission2QuizResult);
-
-            let optionStyle =
-              'border-slate-700 bg-slate-900 text-slate-200 hover:border-cyan-400';
-
-            if (!hasAnswered && isSelected) {
-              optionStyle = 'border-cyan-400 bg-cyan-950 text-white';
-            }
-
-            if (hasAnswered && isCorrect) {
-              optionStyle = 'border-emerald-400 bg-emerald-950 text-white';
-            } else if (hasAnswered && isSelected && !isCorrect) {
-              optionStyle = 'border-red-400 bg-red-950 text-white';
-            }
-
-            return (
-              <button
-                key={index}
-                type="button"
-                disabled={hasAnswered}
-                onClick={() => setSelectedMission2Answer(index)}
-                className={`w-full rounded-xl border-2 p-4 text-left text-sm font-bold transition ${optionStyle}`}
-              >
-                {String.fromCharCode(65 + index)}. {option}
-              </button>
-            );
-          })}
-        </div>
-
-        {activeMission2QuizResult && (
-          <div className="mb-5 rounded-xl bg-slate-900 p-4 text-left">
-            <p
-              className={`mb-2 font-black ${
-                activeMission2QuizResult.correct
-                  ? 'text-emerald-400'
-                  : 'text-amber-300'
-              }`}
-            >
-              {activeMission2QuizResult.correct
-                ? 'Correct! Great work!'
-                : 'Not quite! Let’s learn from it.'}
-            </p>
-
-            <p className="text-sm leading-relaxed text-slate-200">
-              {activeMission2Quiz.explanation}
-            </p>
-          </div>
-        )}
-
-        {!activeMission2QuizResult ? (
-          <button
-            type="button"
-            disabled={selectedMission2Answer === null}
-            onClick={() => {
-              if (selectedMission2Answer === null) return;
-
-              const correct =
-                selectedMission2Answer === activeMission2Quiz.correctAnswer;
-
-              setMission2QuizResults((prev) => [
-                ...prev.filter(
-                  (result) => result.quizId !== activeMission2Quiz.id
-                ),
-                {
-                  quizId: activeMission2Quiz.id,
-                  selectedAnswer: selectedMission2Answer,
-                  correct,
-                },
-              ]);
-            }}
-            className="w-full rounded-xl bg-cyan-400 px-6 py-3 font-black text-slate-950 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            Check Answer
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={() => {
-              setActiveMission2QuizId(null);
-              setSelectedMission2Answer(null);
-            }}
-            className="w-full rounded-xl bg-cyan-400 px-6 py-3 font-black text-slate-950 transition hover:bg-cyan-300"
-          >
-            Continue Mission
-          </button>
-        )}
-      </div>
-    </div>
-  )}
-
-
-          {/* -------------------------- */}
 
           {activeEventCinematic && (screenState === 'playing' || activeEventCinematic === 'mission_3_final_home') && (
             <DisasterCinematicModal

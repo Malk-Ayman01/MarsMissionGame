@@ -251,7 +251,7 @@ export const NasaFieldGuide: React.FC<NasaFieldGuideProps> = ({ unlockedFactIds,
                   <PixelIcon name="sparkles" className="w-3.5 h-3.5" />
                   <span>SCIENCE REPORT:</span>
                 </div>
-                <p className="font-mono-hud text-xs sm:text-sm text-slate-200 leading-relaxed">
+                <p className="font-mono-hud text-xs sm:text-sm text-slate-200 leading-relaxed whitespace-pre-line">
                   {selectedFact.nasaFact}
                 </p>
 

@@ -10,18 +10,26 @@ export const NASA_FACTS: EducationalFact[] = [
     imageSrc: '/assets/nasa/jezero_crater.jpg',
     imageCaption: 'NASA picture of Jezero Crater on Mars (curved ancient river delta).',
     nasaFact:
-      'Long ago, Jezero Crater (45 km wide and ~2,500 meters deep below average Mars ground!) was a big lake full of water! Rivers carried mud and clay into the lake. Today, each sol (one Mars day — 24 hours and 39 minutes) is freezing cold with very thin air, so astronauts must wear pressurized spacesuits.',
+      `Long ago, water flowed into Jezero Crater and filled a lake. A river left behind a fan-shaped pile of sand and mud called a delta. NASA’s Perseverance rover is exploring this dry place and studying its rocks for clues about Mars long ago.
+
+NASA/JPL shared these real weather readings in its Nov. 15, 2021 Mars report. It was mid-summer at Jezero:
+• Sol 252 (Nov. 4): high -5°F (-21°C), low -110°F (-79°C)
+• Sol 253 (Nov. 5): high -6°F (-21°C), low -108°F (-78°C)
+• Sol 256 (Nov. 8): high -7°F (-22°C), low -107°F (-77°C)
+• Sol 257 (Nov. 9): high -6°F (-21°C), low -108°F (-78°C)
+• Sol 258 (Nov. 10): high -4°F (-20°C), low -109°F (-78°C)
+These are past measurements, not today’s weather.`,
     olderKidsNote:
-      'Orbital elevation maps show Jezero Crater sitting around -2,500 meters elevation where the Neretva river delta flowed in. Surface air pressure stays near ~710–760 Pa (under 1% of Earth) and background radiation is ~0.64 mSv/day.',
+      'The fan-shaped delta formed where a river flowed into an ancient lake. Layers of sand and mud can preserve clues about the water that once shaped Jezero.',
     classroomPrompt:
-      'Class Question: Why can liquid rivers NOT flow on Mars today even though Jezero Crater held a giant lake 3.5 billion years ago?',
+      'Look at the weather readings: which day had the warmest high temperature?',
     gameContext:
-      'In Mission 1, your damaged ship and broken radio tower sit on this rocky lake edge during real Mars Sol weather.',
-    sourceName: 'NASA Mars 2020 Perseverance & MSL RAD',
-    sourceUrl: 'https://science.nasa.gov/mission/mars-2020-perseverance/',
+      'Jezero Crater is a real place. The broken ship and rescue mission in this game are part of a fictional adventure.',
+    sourceName: 'NASA/JPL — How’s the Weather on Mars? (Nov. 15, 2021)',
+    sourceUrl: 'https://mars.nasa.gov/mars2020/spacecraft/instruments/meda/',
     missionId: 'mission_1',
     unlockedAtStage: 'stage_1_leave_habitat',
-    instrumentName: 'Space Orbiter Camera & MEDA',
+    instrumentName: 'Perseverance Rover / MEDA',
     solObservation: 'Jezero Crater',
     datasetType: 'REAL_NASA_OBSERVATION',
   },

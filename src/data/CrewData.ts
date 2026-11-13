@@ -23,7 +23,7 @@ export const crews: CrewMember[] = [
   {
     id: '01-BIO',
     name: 'Hedeya',
-    role: 'Mechanical Engineer',
+    role: 'Fix-It & Science Engineer',
     quote: 'Keeps our suits, life support, and Mars tools running safely!',
     border: '#123040',
     tag: {
@@ -44,7 +44,7 @@ export const crews: CrewMember[] = [
     id: '02-ENG',
     name: 'Samantha',
     role: 'Space Scientist & Power Lead',
-    quote: 'Checks ship power systems ',
+    quote: 'Checks ship power systems and studies rocks and caves on Mars!',
     border: '#3A2810',
     tag: {
       bg: '#2A1E08',
@@ -63,8 +63,8 @@ export const crews: CrewMember[] = [
   {
     id: '03-CMD',
     name: 'Hazaloom',
-    role: 'Geologist',
-    quote: 'studies rocks and mars geology',
+    role: 'Mission Commander',
+    quote: 'Drives the Mars rover, leads the team, and guides the mission home!',
     border: '#3A1515',
     tag: {
       bg: '#2A1010',

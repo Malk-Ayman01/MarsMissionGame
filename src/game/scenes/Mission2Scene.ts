@@ -107,44 +107,6 @@ export class Mission2Scene extends Phaser.Scene {
   private eKeyCooldown = 0;
   private collisionCooldown = 0;
 
-
-// -------- MODIFIED PART ----------
-  private learnedTerms = new Set<string>();
-
-  
-
-private readonly mission2Terms: Record<
-  string,
-  { title: string; explanation: string }
-> = {
-  rimfax_subsurface_radar: {
-    title: 'RIMFAX',
-    explanation:
-      'A radar tool that sends signals into the ground to help scientists discover what is hidden below the surface.',
-  },
-  radiation: {
-    title: 'Space Radiation',
-    explanation:
-      'Invisible energy from space that can be harmful to astronauts.',
-  },
-  lava_tube: {
-    title: 'Lava Tube',
-    explanation:
-      'A natural tunnel formed long ago when flowing lava cooled and hardened.',
-  },
-  core_sample: {
-    title: 'Core Sample',
-    explanation:
-      'A small piece of rock collected so scientists can study what is beneath the surface.',
-  },
-  marsquake: {
-    title: 'Marsquake',
-    explanation:
-      'A shaking of the ground on Mars, similar to an earthquake on Earth.',
-  },
-};
-
-// -----------------
   constructor() {
     super('Mission2Scene');
   }
@@ -152,27 +114,6 @@ private readonly mission2Terms: Record<
   public init(data: { callbacks: SceneCallbacks }) {
     this.callbacks = data.callbacks;
   }
-
-  // ----------- MODIFIED PART ---------
-
-private teachTerm(termId: string) {
-  if (this.learnedTerms.has(termId)) return;
-
-  const term = this.mission2Terms[termId];
-
-  if (!term) return;
-
-  this.learnedTerms.add(termId);
-
-  this.callbacks.onMission2TermLearned?.({
-    id: termId,
-    title: term.title,
-    explanation: term.explanation,
-  });
-}
-
-
-// -----------------------
 
   public preload() {
     generateMarsTextures(this);
@@ -386,21 +327,10 @@ private teachTerm(termId: string) {
 
     this.isPlanningFrozen = false;
     this.routePlanChosen = false;
-    // this.callbacks.onFactUnlock('rimfax_subsurface_radar');
-    // this.callbacks.onStageChange(this.stage);
-    // this.callbacks.onDialogueTrigger('m2_stage1_start');
-    // sounds.playObjectiveStinger();
-
-    //---------- MODIFIED PART ---------
-this.callbacks.onFactUnlock('rimfax_subsurface_radar');
-this.teachTerm('rimfax_subsurface_radar');
-
-this.callbacks.onStageChange(this.stage);
-this.callbacks.onDialogueTrigger('m2_stage1_start');
-this.callbacks.onMission2QuizRequested?.('rimfax');
-sounds.playObjectiveStinger();
-
-// ----------------------
+    this.callbacks.onFactUnlock('rimfax_subsurface_radar');
+    this.callbacks.onStageChange(this.stage);
+    this.callbacks.onDialogueTrigger('m2_stage1_start');
+    sounds.playObjectiveStinger();
   }
 
   private handleRoverCollision() {
@@ -496,7 +426,6 @@ sounds.playObjectiveStinger();
 
   public update(_time: number, delta: number) {
     if (
-   
       this.isPlanningFrozen ||
       this.isReadingPaused ||
       this.stage === 'm2_cinematic_ending' ||
@@ -537,24 +466,10 @@ sounds.playObjectiveStinger();
     this.isInsideHabitat = distToHabitat < 135;
     this.isInLavaTube = py > 1200;
 
-    // if (this.isInLavaTube && !this.caveNoticeShown) {
-    //   this.caveNoticeShown = true;
-    //   this.callbacks.onWarning('SHIELD BONUS! Thick cave stone blocks 95% of space rays!');
-    // }
-
-    // --------- MODIFIED PART -------------
     if (this.isInLavaTube && !this.caveNoticeShown) {
-  this.caveNoticeShown = true;
-
-  this.callbacks.onWarning(
-    'CAVE SHELTER! Thick rock above you helps block some space radiation.'
-  );
-
-  this.teachTerm('radiation');
-  this.teachTerm('lava_tube');
-}
-
-    // ------------------------
+      this.caveNoticeShown = true;
+      this.callbacks.onWarning('SHIELD BONUS! Thick cave stone blocks 95% of space rays!');
+    }
 
     if (this.isInsideHabitat) {
       const sunlightFactor = 0.7 + (this.solScenario.sunlightPercentForCrops / 100) * 0.6;
@@ -818,7 +733,6 @@ sounds.playObjectiveStinger();
           this.callbacks.onWarning('SENSOR 1 ACTIVE! -6% Battery power used, +15 Science!');
           this.callbacks.onFactUnlock('neretva_vallis_floods');
           this.callbacks.onDialogueTrigger('m2_beacon1_placed');
-          this.callbacks.onMission2QuizRequested?.('sensors');
           this.callbacks.onStageChange(this.stage);
         }
       }
@@ -879,7 +793,6 @@ sounds.playObjectiveStinger();
           this.astronaut.setPosition(this.cavePortalExit.x, this.cavePortalExit.y);
           sounds.playObjectiveStinger();
           this.callbacks.onDialogueTrigger('m2_cave_entry');
-          this.callbacks.onMission2QuizRequested?.('cave');
 
           this.stage = 'm2_stage_4_sample_extraction';
           this.callbacks.onStageChange(this.stage);
@@ -996,9 +909,6 @@ sounds.playObjectiveStinger();
     this.callbacks.onFactUnlock('neretva_vallis_floods');
     this.callbacks.onStageChange(this.stage);
     this.callbacks.onDialogueTrigger('m2_beacon1_placed');
-    // ----------- MODIFIED PART -------------
-this.callbacks.onMission2QuizRequested?.('sensors');
-    // ----------------
     sounds.playObjectiveStinger();
   }
 
@@ -1031,18 +941,8 @@ this.callbacks.onMission2QuizRequested?.('sensors');
 
     sounds.playPickup();
     sounds.playObjectiveStinger();
-    // this.callbacks.onFactUnlock('sample_core_caching');
-    // this.callbacks.onDialogueTrigger('m2_sample_drilled');
-
-    // ------------ MODIFIED PART -----------
     this.callbacks.onFactUnlock('sample_core_caching');
-this.teachTerm('core_sample');
-
-this.callbacks.onDialogueTrigger('m2_sample_drilled');
-this.callbacks.onMission2QuizRequested?.('sample');
-
-
-    // -----------------
+    this.callbacks.onDialogueTrigger('m2_sample_drilled');
     this.pendingMarsquakeTimer = 1.6;
   }
 
@@ -1078,12 +978,6 @@ this.callbacks.onMission2QuizRequested?.('sample');
     sounds.playWarningAlarm();
     sounds.playObjectiveStinger();
     this.callbacks.onDialogueTrigger('m2_tremor_alert');
-    this.callbacks.onMission2QuizRequested?.('marsquake');
-
-    // --------- MODIFIED PART -----------
-    this.teachTerm('marsquake');
-
-    // --------------------
   }
 
   public resetMission(waitForPlan = false) {
