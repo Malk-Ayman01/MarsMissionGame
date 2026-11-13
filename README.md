@@ -1,4 +1,4 @@
-# Mars Mission: The Lost Signal
+# Mars Mission: 
 
 ### A 2D Mars survival game where every choice costs something: and every cost is real science.
 
