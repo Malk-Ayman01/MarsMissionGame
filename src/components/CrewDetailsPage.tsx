@@ -19,11 +19,10 @@ interface CrewDossierProfile {
 const CREW_PROFILES: Record<string, CrewDossierProfile> = {
   '01-BIO': {
     dossierCode: 'DOSSIER // 01-BIO // HEDEYA',
-    storyTitle: 'A MOTHER WAITING ON EARTH',
+    storyTitle: 'FIX-IT & LIFE SUPPORT PARTNER',
     missionSpecialty: 'STRONGER SHIELDING & FASTER BASE AIR REFILLS (SLIGHTLY HEAVIER BATTERY GEAR)',
     story:
-     "Hedeya is a mother first. Back home, her daughter Lina keeps a calendar on the fridge and crosses off every day her mum is away. Every night on Mars, Hedeya records a voice message for her, even though each one takes minutes to cross space.\n\nWith Hedeya on point, you refill Suit Air faster inside the green hydroponic ring and absorb less space-ray wear—while she teaches you why every electrical switch and life-support pump matters.",
-
+      'Hedeya knows every wire, air filter, and pressure valve inside your Mars Base and rover.\n\nWith Hedeya on point, you refill Suit Air faster inside the green hydroponic ring and absorb less space-ray wear—while she teaches you why every electrical switch and life-support pump matters.',
     stats: [
       { label: 'LIFE SUPPORT & SUITS', value: 19, color: '#2EC4B6' },
       { label: 'ROVER REPAIRS', value: 18, color: '#38BDF8' },
@@ -32,10 +31,10 @@ const CREW_PROFILES: Record<string, CrewDossierProfile> = {
   },
   '02-ENG': {
     dossierCode: 'DOSSIER // 02-ENG // SAMANTHA',
-    storyTitle:'A DAUGHTER WITH A TELESCOPE',
+    storyTitle: 'SPACE SCIENTIST & POWER PARTNER',
     missionSpecialty: 'SAVES 15% ROVER BATTERY & EARNS +10 BONUS SCIENCE (LIGHTER RAY RIG)',
     story:
-     "Samantha learned the stars on her dad's rooftop, through his old telescope. He is still up there on every clear night, looking for the red dot of Mars and hoping she is safe.\n\nWith Samantha on point, your rover stretches battery power further and collects extra NASA science—so watch your Shielding carefully outside!",
+      'Samantha reads NASA weather sensors, ground-penetrating radar, and power budgets to keep your crew ahead of Mars hazards.\n\nWith Samantha on point, your rover stretches battery power further and collects extra NASA science—so watch your Shielding carefully outside!',
     stats: [
       { label: 'PLANETARY GEOLOGY', value: 19, color: '#FF9F1C' },
       { label: 'RADAR & SENSORS', value: 18, color: '#38BDF8' },
@@ -44,10 +43,10 @@ const CREW_PROFILES: Record<string, CrewDossierProfile> = {
   },
   '03-CMD': {
     dossierCode: 'DOSSIER // 03-CMD // HAZALOOM',
-    storyTitle:'A BROTHER WITH A SEAT AT THE TABLE',
+    storyTitle: 'ROVER DRIVER & TEAM PROTECTOR',
     missionSpecialty: 'FASTER ROVER SPEED & SOFTER ROCK BUMPS (USES SLIGHTLY MORE SUIT AIR ON FOOT)',
     story:
-     "Hazaloom has never missed a family dinner. Hazaloom's brother jhonny and his nephew xavier still set a place at the table every Friday, and they are saving that seat until the day Hazaloom walks back in.\n\nWith Hazaloom on point, you drive faster and take softer rock bumps—just remember to stay inside the rover or base so Suit Air stays high!",
+      'Hazaloom steers the team across Jezero Crater, down into ancient river valleys, and safely back out of shaking lava caves.\n\nWith Hazaloom on point, you drive faster and take softer rock bumps—just remember to stay inside the rover or base so Suit Air stays high!',
     stats: [
       { label: 'ROVER STEERING & NAVIGATION', value: 19, color: '#FF4D4D' },
       { label: 'HAZARD RESPONSE', value: 18, color: '#F59E0B' },

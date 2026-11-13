@@ -246,7 +246,7 @@ export const MissionDecisionModal: React.FC<MissionDecisionModalProps> = ({
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className={`grid grid-cols-1 ${choices.length > 1 ? 'md:grid-cols-3' : 'max-w-xl mx-auto w-full'} gap-3`}>
                 {choices.map((choice) => {
                   const isSelected = selectedId === choice.id;
                   return (

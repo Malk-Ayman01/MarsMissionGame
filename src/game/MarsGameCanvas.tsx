@@ -99,14 +99,6 @@ export const MarsGameCanvas: React.FC<MarsGameCanvasProps> = ({
       onOpenLaunchDecision: () => callbacksRef.current.onOpenLaunchDecision?.(),
       onOpenRoverPrepDecision: () => callbacksRef.current.onOpenRoverPrepDecision?.(),
       onOpenMission2RouteDecision: () => callbacksRef.current.onOpenMission2RouteDecision?.(),
-
-      // ------ MODIFIED PART ----------
-      onMission2TermLearned: (term) =>
-  callbacksRef.current.onMission2TermLearned?.(term),
-
-      onMission2QuizRequested: (quizId) =>
-  callbacksRef.current.onMission2QuizRequested?.(quizId),
-      // ---------------
     };
 
     const TargetSceneClass =
