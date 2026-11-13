@@ -106,6 +106,23 @@ export const MissionCompleteModal: React.FC<MissionCompleteModalProps> = ({
                 • Strategy Picked: <b className="text-white">{stats.tradeOffTitle}</b>
               </p>
             )}
+                        {stats.tradeOffChoice && (
+              <div className="mt-1.5 p-2 bg-black/40 border border-amber-500/40 space-y-1 normal-case">
+                <p className="text-emerald-300">
+                  GAINED: {stats.tradeOffChoice.gainText}
+                </p>
+                <p className="text-red-300">
+                  COST: {stats.tradeOffChoice.costText}
+                </p>
+                <p className="text-sky-200">
+                  Real mission planners face this too: {stats.tradeOffChoice.realScienceNote}
+                </p>
+                <p className="text-slate-300">
+                  YOUR RESULT: Suit Air {Math.round(stats.finalOxygen)}% · Battery{' '}
+                  {Math.round(stats.finalBattery)}% · Shield {Math.round(stats.finalCondition)}%
+                </p>
+              </div>
+            )}
             {!isMission2 && !isMission3 && stats.m1StormChoice && (
               <p>
                 • Radio Tower Decision:{' '}

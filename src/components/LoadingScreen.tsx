@@ -104,7 +104,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
 
         <div className="loading-bottomline">
           <span>JEZERO CRATER · MARS</span>
-          <span>YEAR 2038</span>
+         {/* <span>YEAR 2038</span> */}
           <span>SECURE CONNECTION</span>
         </div>
       </div>
