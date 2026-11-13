@@ -1,0 +1,6 @@
+{
+  "name": "Mars Mission: The Lost Signal",
+  "description": "An interactive 2D Mars exploration and survival mission at Jezero Crater where kids ages 7–12 make real NASA-grounded trade-off decisions about life support, power budgeting, radiation shielding, and communications.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
