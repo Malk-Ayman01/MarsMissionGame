@@ -30,6 +30,14 @@ export interface SceneCallbacks {
   onOpenLaunchDecision?: () => void;
   onOpenRoverPrepDecision?: () => void;
   onOpenMission2RouteDecision?: () => void;
+
+  // ------ MODIFIED PART ----------
+  onMission2TermLearned?: (term: {
+  id: string;
+  title: string;
+  explanation: string;
+}) => void;
+// -----------------
 }
 
 export class Mission1Scene extends Phaser.Scene {

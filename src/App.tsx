@@ -111,6 +111,15 @@ export default function App() {
   const [interactionPrompt, setInteractionPrompt] = useState<string | null>(null);
   const [warningMessage, setWarningMessage] = useState<string | null>(null);
 
+  // -------------- MODIFIED PART -------------
+  const [mission2TermPopup, setMission2TermPopup] = useState<{
+  id: string;
+  title: string;
+  explanation: string;
+} | null>(null);
+
+  // -----------------------
+
   const [isPaused, setIsPaused] = useState(false);
   const [isFieldGuideOpen, setIsFieldGuideOpen] = useState(false);
   const [isBreakerConsoleOpen, setIsBreakerConsoleOpen] = useState(false);
@@ -203,6 +212,7 @@ export default function App() {
     if (warningTimeoutRef.current) clearTimeout(warningTimeoutRef.current);
     warningTimeoutRef.current = setTimeout(() => {
       setWarningMessage(null);
+ 
     }, 4000);
   }, []);
 
@@ -289,6 +299,14 @@ export default function App() {
       setActiveDialogue(null);
       setIsMission2PlanOpen(true);
     },
+
+    // ------------- MODIFIED PART ------------
+  onMission2TermLearned: (term) => {
+  console.log('[Mission 2] Term received in App:', term);
+  setMission2TermPopup(term);
+},
+
+    // -------------------
     onTriggerDisasterCinematic: (eventType: CinematicEventType = 'mission_1_explosion') => {
       isReplayingCutsceneRef.current = false;
       setActiveDialogue(null);
@@ -321,6 +339,10 @@ export default function App() {
     setFactQueue([]);
     setInteractionPrompt(null);
     setWarningMessage(null);
+
+         // -------- MODIFIED PART ----------
+      setMission2TermPopup(null);
+      // --------------
     setStage(
       missionId === 'mission_3'
         ? 'm3_stage_1_grid_triage'
@@ -411,6 +433,10 @@ export default function App() {
     setActiveEventCinematic(null);
     setIsDamagedStatusOpen(false);
     setActiveDialogue(null);
+    // ---------- MODIFIED PART ----------
+    setMission2TermPopup(null);
+
+    // ----------------
     setFactQueue([]);
     setScreenState('menu');
   };
@@ -422,6 +448,10 @@ export default function App() {
     }
     const shouldPauseScene = Boolean(
       activeEducationalFact ||
+      // ------ MODIFIED PART --------
+          mission2TermPopup ||
+
+      // ------------
         isPaused ||
         isBreakerConsoleOpen ||
         isRadioMiniGameOpen ||
@@ -438,6 +468,11 @@ export default function App() {
   }, [
     screenState,
     activeEducationalFact,
+
+    // ---------MODIFIED PART --------
+    mission2TermPopup,
+
+    // --------------
     isPaused,
     isBreakerConsoleOpen,
     isRadioMiniGameOpen,
@@ -683,6 +718,9 @@ export default function App() {
               blockSpaceKey={stage === 'm3_stage_4_mav_ascent'}
               paused={Boolean(
                 activeEducationalFact ||
+                // -----------MODIFIED PART -------
+                  mission2TermPopup ||
+                //------------
                   isBreakerConsoleOpen ||
                   isRadioMiniGameOpen ||
                   isDrillMiniGameOpen ||
@@ -709,6 +747,38 @@ export default function App() {
               onClose={() => setFactQueue((prev) => prev.slice(1))}
             />
           )}
+
+          {/* ----------- MODIFIED PART ------------- */}
+
+          {mission2TermPopup &&
+  screenState === 'playing' &&
+  activeMission === 'mission_2' && (
+    <div className="absolute inset-0 z-[80] flex items-center justify-center bg-black/75 p-4">
+      <div className="w-full max-w-lg rounded-2xl border-2 border-cyan-400 bg-slate-950 p-6 text-center shadow-2xl">
+        <div className="mb-3 text-sm font-bold tracking-[0.25em] text-cyan-300">
+          NEW SCIENCE TERM
+        </div>
+
+        <h2 className="mb-4 text-3xl font-black text-white">
+          {mission2TermPopup.title}
+        </h2>
+
+        <p className="mb-6 text-base leading-relaxed text-slate-200">
+          {mission2TermPopup.explanation}
+        </p>
+
+        <button
+          type="button"
+          onClick={() => setMission2TermPopup(null)}
+          className="rounded-xl bg-cyan-400 px-8 py-3 font-black text-slate-950 transition hover:bg-cyan-300"
+        >
+          Got it! Continue Mission
+        </button>
+      </div>
+    </div>
+  )}
+
+          {/* -------------------------- */}
 
           {activeEventCinematic && (screenState === 'playing' || activeEventCinematic === 'mission_3_final_home') && (
             <DisasterCinematicModal
