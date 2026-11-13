@@ -22,37 +22,37 @@ const HEALTH_CHALLENGES: HealthChallenge[] = [
   {
     id: 'bones',
     title: '1. Bones & Muscles in Zero-G (Hazaloom)',
-    concept: 'In microgravity, astronauts float effortlessly—so bones and leg muscles stop working!',
+    concept: 'In space, astronauts float. Their bones and muscles do not have to hold up their weight, so they get weaker.',
     wrongLabel: 'Skip Workout to Rest',
     wrongAfterEffect:
-      'AFTER-EFFECT: Without pushing against gravity, astronauts lose 1–2% bone strength each month and get too weak to walk on Earth!',
-    rightLabel: '2-Hour Daily Resistance Gym',
+      'AFTER-EFFECT: Without exercise, bones and muscles get weaker. Astronauts can lose about 1% of their bone strength every month in space!',
+    rightLabel: 'Exercise About 2 Hours Every Day',
     rightAfterEffect:
-      'SOLVED! Pulling against space resistance machines keeps Hazaloom’s bones & muscles strong (+5 Science)!',
+      'SOLVED! Astronauts on the Space Station exercise about 2 hours a day on special machines. That keeps Hazaloom’s bones and muscles strong (+5 Science)!',
     icon: 'activity',
   },
   {
     id: 'sleep',
-    title: '2. 16 Sunrises a Day! (Samantha)',
-    concept: 'In orbit, the Sun rises and sets every 90 minutes, confusing the brain’s sleep clock!',
+    title: '2. No Normal Day and Night (Samantha)',
+    concept: 'In space there is no normal sunrise and sunset, so the body’s sleep clock gets confused.',
     wrongLabel: 'Bright White Lights 24/7',
     wrongAfterEffect:
-      'AFTER-EFFECT: Constant bright white light tricks your brain into thinking it is noon all the time—causing tired mistakes!',
-    rightLabel: 'Blue-Tuned Sleep Clock Lights',
+      'AFTER-EFFECT: Bright light all the time makes the brain think it is always daytime. Tired astronauts make more mistakes!',
+    rightLabel: 'Day-and-Night Lights',
     rightAfterEffect:
-      'SOLVED! Special NASA sleep lights mimic Earth day and night so Samantha rests deep (+5 Science)!',
+      'SOLVED! NASA uses lights that are brighter and bluer in the "morning" and dimmer and redder at "night", so Samantha sleeps well (+5 Science)!',
     icon: 'sun',
   },
   {
     id: 'immune',
-    title: '3. Space Immune Shield (Hedeya)',
-    concept: 'Long space trips stress immune cells, making astronauts catch germs much easier!',
+    title: '3. Healthy Food in Space (Hedeya)',
+    concept: 'The trip from Mars back to Earth takes many months. Astronauts need healthy food the whole way.',
     wrongLabel: 'Dry Crackers & Candy Only',
     wrongAfterEffect:
-      'AFTER-EFFECT: Zero fresh vitamins leaves immune cells sluggish during the 7-month flight back to Earth!',
-    rightLabel: 'Fresh Hydroponic Space Veggies',
+      'AFTER-EFFECT: Only snacks means missing vitamins. That is not healthy for a trip that lasts many months!',
+    rightLabel: 'Healthy Meals + Fresh Space Lettuce',
     rightAfterEffect:
-      'SOLVED! Crisp space-grown lettuce & greens boost vitamins AND recycle cabin oxygen (+5 Science)!',
+      'SOLVED! NASA astronauts have grown and eaten fresh lettuce on the Space Station. Fresh food adds vitamins (+5 Science)!',
     icon: 'sprout',
   },
 ];
@@ -62,10 +62,11 @@ export const CrewHealthActionModal: React.FC<CrewHealthActionModalProps> = ({
 }) => {
   const [solved, setSolved] = useState<Record<string, boolean>>({});
   const [wrongFeedback, setWrongFeedback] = useState<Record<string, boolean>>({});
-  const [boostChoice, setBoostChoice] = useState<Mission3HealthBoostChoice | null>(null);
+  // The old "pick a home ship boost" choice was removed: real crews need ALL three habits.
+  const boostChoice: Mission3HealthBoostChoice = 'fitness';
 
   const allProblemsSolved = HEALTH_CHALLENGES.every((c) => solved[c.id]);
-  const allReady = allProblemsSolved && boostChoice !== null;
+  const allReady = allProblemsSolved;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90">
@@ -76,10 +77,10 @@ export const CrewHealthActionModal: React.FC<CrewHealthActionModalProps> = ({
             <span>DOCKED IN ORBIT // ZERO-GRAVITY CREW CHECK</span>
           </div>
           <h2 className="font-title text-base sm:text-xl font-bold text-white uppercase">
-            Solve Crew Health &amp; Pick Your Home Ship Boost!
+            Keep the Crew Healthy in Space!
           </h2>
           <p className="font-mono-hud text-xs text-emerald-200 mt-1 leading-relaxed">
-            Reaching orbit is only half the trip! The flight home takes months in zero gravity. Test each NASA choice below to see its <b className="text-white">after-effect</b> and fix all 3 crew problems:
+            Reaching orbit is only half the trip! The flight home takes months while floating. Try each choice below to see what happens, then fix all 3 crew problems:
           </p>
         </div>
 
@@ -168,72 +169,10 @@ export const CrewHealthActionModal: React.FC<CrewHealthActionModalProps> = ({
           })}
         </div>
 
-        {/* Final Return Ship Power Decision */}
-        <div className="mt-4 pt-3 border-t-2 border-[#14532d]">
-          <div className="text-xs font-mono-hud font-bold text-amber-300 uppercase tracking-wider mb-2">
-            FINAL DECISION: WHERE DO YOU SEND EXTRA HOME SHIP POWER?
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-            <button
-              type="button"
-              onClick={() => {
-                sounds.playPickup();
-                setBoostChoice('fitness');
-              }}
-              className={`p-2.5 text-left border-2 cursor-pointer ${
-                boostChoice === 'fitness'
-                  ? 'bg-emerald-950/70 border-emerald-400'
-                  : 'bg-[#0b1f17] border-[#14532d] hover:border-emerald-500'
-              }`}
-            >
-              <div className="font-title text-[11px] text-white uppercase">Space Health Lab</div>
-              <div className="font-mono-hud text-[10px] text-emerald-300 mt-1">
-                +20 Science · Tracks bone &amp; muscle recovery!
-              </div>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                sounds.playPickup();
-                setBoostChoice('shield');
-              }}
-              className={`p-2.5 text-left border-2 cursor-pointer ${
-                boostChoice === 'shield'
-                  ? 'bg-emerald-950/70 border-emerald-400'
-                  : 'bg-[#0b1f17] border-[#14532d] hover:border-emerald-500'
-              }`}
-            >
-              <div className="font-title text-[11px] text-white uppercase">Solar Ray Shield</div>
-              <div className="font-mono-hud text-[10px] text-sky-300 mt-1">
-                +15% Final Shielding · Extra deep-space ray protection!
-              </div>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                sounds.playPickup();
-                setBoostChoice('hydroponics');
-              }}
-              className={`p-2.5 text-left border-2 cursor-pointer ${
-                boostChoice === 'hydroponics'
-                  ? 'bg-emerald-950/70 border-emerald-400'
-                  : 'bg-[#0b1f17] border-[#14532d] hover:border-emerald-500'
-              }`}
-            >
-              <div className="font-title text-[11px] text-white uppercase">Greenhouse Air</div>
-              <div className="font-mono-hud text-[10px] text-amber-300 mt-1">
-                +15% Life Support &amp; +10 Science · Fresh food &amp; O₂!
-              </div>
-            </button>
-          </div>
-        </div>
-
         <div className="mt-4 pt-3 border-t-2 border-[#14532d] flex justify-end">
           <button
             onClick={() => {
-              if (!allReady || !boostChoice) return;
+              if (!allReady) return;
               sounds.playMissionSuccess();
               onComplete(boostChoice);
             }}
@@ -248,9 +187,7 @@ export const CrewHealthActionModal: React.FC<CrewHealthActionModalProps> = ({
             <span>
               {allReady
                 ? 'Fire Thrusters & Fly Home!'
-                : !allProblemsSolved
-                ? 'Solve All 3 Crew Health Problems Above'
-                : 'Pick Your Final Home Ship Power Boost'}
+                : 'Solve All 3 Crew Health Problems Above'}
             </span>
           </button>
         </div>

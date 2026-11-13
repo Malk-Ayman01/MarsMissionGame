@@ -127,7 +127,7 @@ export const MISSION_TRADE_OFFS: Record<MissionId, MissionTradeOffOption[]> = {
       gainText: 'Fixes the radio tower 35% faster without waiting for Earth + saves 25% Battery!',
       costText: 'Lighter rover frame gives 25% less protection from space rays and rocks.',
       realScienceNote:
-        'Because radio messages take 7–21 minutes each way, NASA builds smart onboard computers so rovers do not wait for Earth.',
+        'Because radio messages take about 3 to 22 minutes each way, NASA builds smart onboard computers so rovers do not wait for Earth.',
       effects: {
         batteryDrainMultiplier: 0.75,
         shieldingDrainMultiplier: 1.25,
@@ -205,7 +205,7 @@ export const MISSION_TRADE_OFFS: Record<MissionId, MissionTradeOffOption[]> = {
       gainText: 'Handles the Earth radio delay, flies 18% faster, and saves 20% Rover Battery!',
       costText: 'Thin frame takes 30% more wear from dust tornadoes & space rays.',
       realScienceNote:
-        'Earth cannot steer a Mars rocket live with a 14–42 min radio delay, so the rocket steers itself while staying super light.',
+        'Earth cannot steer a Mars rocket live because radio takes about 3 to 22 minutes each way, so the rocket steers itself.',
       effects: {
         batteryDrainMultiplier: 0.8,
         shieldingDrainMultiplier: 1.3,

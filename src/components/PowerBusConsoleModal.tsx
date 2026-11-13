@@ -15,13 +15,13 @@ export const PowerBusConsoleModal: React.FC<PowerBusConsoleModalProps> = ({
 }) => {
   const [phase, setPhase] = useState<'guide' | 'solve'>('guide');
   const [heaterBrokenOn, setHeaterBrokenOn] = useState(true);
-  const [bonusMode, setBonusMode] = useState<BreakerAllocationChoice>('shield');
+  // No extra "helper tool" choice anymore: the lesson is simply to switch off the part that wastes power.
+  const bonusMode: BreakerAllocationChoice = 'eco';
   const [suitAirOn, setSuitAirOn] = useState(true);
   const [wheelsOn, setWheelsOn] = useState(true);
 
   const totalWatts =
     (heaterBrokenOn ? 380 : 0) +
-    (bonusMode === 'shield' ? 80 : bonusMode === 'scanner' ? 80 : 0) +
     (suitAirOn ? 140 : 0) +
     (wheelsOn ? 180 : 0);
 
@@ -46,13 +46,13 @@ export const PowerBusConsoleModal: React.FC<PowerBusConsoleModalProps> = ({
               <span>
                 {phase === 'guide'
                   ? 'HEDEYA EXPLAINS // STEP 1: WHY WATTS MATTER'
-                  : 'HEDEYA HELPS // STEP 2: FIX & DECIDE'}
+                  : 'HEDEYA HELPS // STEP 2: FIX IT'}
               </span>
             </div>
             <h2 className="font-title text-base sm:text-xl font-bold text-white uppercase">
               {phase === 'guide'
                 ? 'Why Won’t the Rover Start?'
-                : 'Fix Broken Heater & Pick Next Tool'}
+                : 'Turn Off the Broken Heater'}
             </h2>
           </div>
           <button
@@ -79,7 +79,7 @@ export const PowerBusConsoleModal: React.FC<PowerBusConsoleModalProps> = ({
                 <div className="text-[10px] font-bold text-amber-400 uppercase tracking-wider mb-1">
                   WHAT IS A WATT (400W BUDGET)?
                 </div>
-                Think of <b className="text-white">400 Watts (400W)</b> like having <b className="text-amber-300">400 buckets of electricity</b> inside our Rover! Right now, fine Mars dust jammed <b className="text-red-300">Heater #2 ON</b>, spilling 380 buckets! That leaves way too little power for our Suit Air (140W) and Rover Wheels (180W).
+                A <b className="text-white">watt (W)</b> tells us how fast a machine uses electricity. Our rover can safely use <b className="text-amber-300">400 W at once</b>. But Mars dust jammed <b className="text-red-300">Heater #2 ON</b>, and it is using <b className="text-red-300">380 W</b> all by itself! Now there is not enough for Suit Air (140 W) and the Wheels (180 W).
               </div>
             </div>
 
@@ -89,15 +89,15 @@ export const PowerBusConsoleModal: React.FC<PowerBusConsoleModalProps> = ({
                   WHY TURN OFF HEATER #2 FIRST?
                 </div>
                 <p className="text-slate-200 leading-relaxed">
-                  140W (Suit Air) + 180W (Wheels) = <b className="text-emerald-300">320W</b>! Once Broken Heater #2 is OFF, you still have <b className="text-amber-300">80W left over</b> to power ONE special helper tool for the dangerous road ahead!
+                  140 W (Suit Air) + 180 W (Wheels) = <b className="text-emerald-300">320 W</b>. That fits under 400 W! So the fix is easy: turn OFF the broken heater and keep the important parts ON.
                 </p>
               </div>
               <div className="p-3 bg-[#1a100e] border-2 border-amber-500/70">
                 <div className="text-[10px] font-bold text-amber-300 uppercase mb-1">
-                  WHY THE ROAD TO THE ROCKET IS HARD:
+                  REAL NASA FACT:
                 </div>
                 <p className="text-slate-200 leading-relaxed">
-                  Spinning <b className="text-red-300">dust tornadoes</b> are sweeping across the desert between here and the Mars Rocket! Each helper tool protects you in one way—but changes your Battery or Shield on the drive.
+                  NASA&apos;s Perseverance rover makes only about <b className="text-amber-300">110 W</b> of power, like one light bulb! Its batteries help when it needs more for a short time (up to 900 W). That&apos;s why rover teams plan every watt.
                 </p>
               </div>
             </div>
@@ -180,91 +180,6 @@ export const PowerBusConsoleModal: React.FC<PowerBusConsoleModalProps> = ({
               </button>
             </div>
 
-            <div className="mt-5">
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                Step 2: Use Your Extra 80W — Pick One Helper Tool for the Tornado Drive:
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    sounds.playPickup();
-                    setBonusMode('shield');
-                  }}
-                  className={`p-3.5 text-left cursor-pointer ${
-                    bonusMode === 'shield'
-                      ? 'pixel-box-emerald bg-emerald-950/55'
-                      : 'pixel-box bg-[#180f0c] hover:bg-[#221511]'
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <PixelIcon name="shield" className="w-5 h-5 text-emerald-400" />
-                    <span className="text-[11px] font-bold px-2 py-0.5 bg-[#0c0706] border border-emerald-500 text-emerald-300">
-                      +80W = 400W
-                    </span>
-                  </div>
-                  <div className="font-title text-xs sm:text-sm font-bold text-white mb-1.5">
-                    Ray &amp; Dust Shield
-                  </div>
-                  <p className="text-xs text-emerald-200 leading-snug">
-                    <b>Why pick this:</b> Cuts dust tornado damage in half! <b>After-effect:</b> Full 400W drains Battery 25% faster—grab Energy Cells!
-                  </p>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    sounds.playPickup();
-                    setBonusMode('scanner');
-                  }}
-                  className={`p-3.5 text-left cursor-pointer ${
-                    bonusMode === 'scanner'
-                      ? 'pixel-box-amber bg-amber-950/50'
-                      : 'pixel-box bg-[#180f0c] hover:bg-[#221511]'
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <PixelIcon name="radio" className="w-5 h-5 text-amber-400" />
-                    <span className="text-[11px] font-bold px-2 py-0.5 bg-[#0c0706] border border-amber-500 text-amber-300">
-                      +80W = 400W
-                    </span>
-                  </div>
-                  <div className="font-title text-xs sm:text-sm font-bold text-white mb-1.5">
-                    Rock Scanner
-                  </div>
-                  <p className="text-xs text-amber-200 leading-snug">
-                    <b>Why pick this:</b> Scans Mars dust &amp; rocks for +25 Science (+5 bonus/cell)! <b>After-effect:</b> Uses 25% more Battery &amp; no extra ray shield.
-                  </p>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    sounds.playPickup();
-                    setBonusMode('eco');
-                  }}
-                  className={`p-3.5 text-left cursor-pointer ${
-                    bonusMode === 'eco'
-                      ? 'pixel-box-cyan bg-sky-950/50'
-                      : 'pixel-box bg-[#180f0c] hover:bg-[#221511]'
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <PixelIcon name="batteryCharging" className="w-5 h-5 text-sky-400" />
-                    <span className="text-[11px] font-bold px-2 py-0.5 bg-[#0c0706] border border-sky-500 text-sky-300">
-                      0W = 320W ECO
-                    </span>
-                  </div>
-                  <div className="font-title text-xs sm:text-sm font-bold text-white mb-1.5">
-                    Battery Boost
-                  </div>
-                  <p className="text-xs text-sky-200 leading-snug">
-                    <b>Why pick this:</b> Saves 80W (+15% Battery &amp; 20% less drain)! <b>After-effect:</b> Lighter shield wears 25% faster—dodge tornadoes!
-                  </p>
-                </button>
-              </div>
-            </div>
-
             <div className="mt-4 p-3.5 bg-[#180f0c] border-2 border-[#49302b] space-y-3">
               <div className="flex items-center justify-between text-xs">
                 <span className="text-slate-300 font-bold uppercase">Rover Power Meter (Safe limit: 400W)</span>
@@ -277,7 +192,7 @@ export const PowerBusConsoleModal: React.FC<PowerBusConsoleModalProps> = ({
                   className={`h-full transition-all duration-150 ${
                     isLoadNominal ? 'bg-emerald-400' : 'bg-red-500'
                   }`}
-                  style={{ width: `${Math.min(100, (totalWatts / 780) * 100)}%` }}
+                  style={{ width: `${Math.min(100, (totalWatts / 700) * 100)}%` }}
                 />
               </div>
 
@@ -327,7 +242,7 @@ export const PowerBusConsoleModal: React.FC<PowerBusConsoleModalProps> = ({
                 {isReadyToDrive ? (
                   <span className="flex items-center gap-1.5 text-emerald-400 font-bold">
                     <PixelIcon name="check" className="w-4 h-4 shrink-0" />
-                    <span>Awesome! Rover is safe and ready to drive!</span>
+                    <span>Great job! 320 W of 400 W. The rover is ready!</span>
                   </span>
                 ) : !areEssentialsOnline ? (
                   <span className="flex items-center gap-1.5 text-red-400 font-bold">

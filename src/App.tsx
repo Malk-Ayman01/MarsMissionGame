@@ -757,7 +757,7 @@ activeMission2QuizId,
       afterEffectText: 'Thin frame takes almost 2x hull wear if you drift out of the green box.',
       solveNextText: 'Use sharp [A]/[D] steering to stay locked inside the green corridor!',
       nasaScienceNote:
-        'Because Mars radio takes 14–42 minutes round-trip, NASA Mars Ascent Vehicles use lightweight autonomous computers to steer themselves.',
+        'Radio messages between Earth and Mars take about 3 to 22 minutes each way, so a Mars rocket must steer itself with its own computer.',
     },
     {
       id: 'science_cargo',
