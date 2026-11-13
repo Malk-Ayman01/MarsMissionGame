@@ -189,15 +189,18 @@ async function getSpaceWeather(): Promise<SpaceWeatherResponse> {
   const endStr = formatDateYmd(end);
 
   try {
+     let donkiFailed = false;
     const [sepRaw, cmeRaw] = await Promise.all([
       fetchJsonWithTimeout(
         `https://api.nasa.gov/DONKI/SEP?startDate=${startStr}&endDate=${endStr}&api_key=${encodeURIComponent(NASA_API_KEY)}`,
         4500
-      ).catch(() => []),
+    // ).catch(() => []),
+      ).catch(() => { donkiFailed = true; return []; }),
       fetchJsonWithTimeout(
         `https://api.nasa.gov/DONKI/CME?startDate=${startStr}&endDate=${endStr}&api_key=${encodeURIComponent(NASA_API_KEY)}`,
         4500
-      ).catch(() => []),
+   // ).catch(() => []),
+      ).catch(() => { donkiFailed = true; return []; }),
     ]);
 
     const sepList = Array.isArray(sepRaw) ? sepRaw : [];
@@ -218,6 +221,10 @@ async function getSpaceWeather(): Promise<SpaceWeatherResponse> {
     }
 
     const totalEvents = sepList.length + cmeList.length;
+     // If NASA could not be reached, do not pretend a quiet Sun is live data.
+    if (donkiFailed && totalEvents === 0) {
+      throw new Error('DONKI unavailable');
+    }
     if (totalEvents === 0) {
       const calmData: SpaceWeatherResponse = {
         severity: 'CALM',
