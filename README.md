@@ -85,8 +85,9 @@ Before embarking (`MissionTradeOffModal`), players inspect a real Mars weather S
 ## 🔬 Curated Real NASA Datasets & Educational Scope
 
 - **Ages 7–12 + Classroom Flex:** Facts default to **Kids (7–9)** plain English with inline **Word Helpers** (`Sol`, `Radiation Dose`, `Hydroponics`, `Light-Time Delay`, `Microgravity`, `Lava Tube`), and toggle to **Explorer+ (10–12 & Classrooms)** for exact NASA readings and discussion questions.
-- **Honest Curated Datasets (`src/data/nasaDatasets.ts`):** All embedded values (Curiosity MSL RAD `0.64–3.80 mSv/day`, Perseverance MEDA `710–760 Pa` & `Tau 0.42–1.65`, NASA VEGGIE/APH crop sunlight `~43%` & perchlorate limits, Deep Space Network `7–21 min` one-way light lag, and RIMFAX/Sample Return specs) are explicitly labeled as curated offline snapshots rather than live streams.
+- **Honest Curated Datasets (`src/data/nasaDatasets.ts`):** All embedded values (Curiosity MSL RAD `0.64–3.80 mSv/day`, Perseverance MEDA `710–760 Pa` & `Tau 0.42–1.65`, NASA VEGGIE/APH crop sunlight `~43%` & perchlorate limits, Earth–Mars radio delay `~3–22 min` one way, and RIMFAX/Sample Return specs) are explicitly labeled as curated offline snapshots rather than live streams.
 - **11 Unlockable Space Fact Cards (`src/data/nasaContent.ts`):** Includes Jezero Crater, **Growing Food on Mars (Space Farming)**, Spare Parts Maintenance, **Radio Delay: Waiting for Earth**, Mars Dust Storms, RIMFAX Radar, Neretva Valley, **Radiation-Blocking Lava Tubes**, Sample Tube #14, **400W Power Trade-Offs**, and **Two-Stage Rocket Launch & Microgravity Docking**.
+## Cutscenes and AI Disclosure
 
 ---
 

@@ -56,7 +56,7 @@ export const MissionCompleteModal: React.FC<MissionCompleteModalProps> = ({
   const activeMission1Check = mission1Checks[mission1CheckIndex];
 
   const learnedSummary = isMission3
-    ? 'You learned why dusty rover parts must be shut down inside a 400W power budget, how a two-stage Mars Rocket drops its empty tank cleanly, and how astronauts dock safely in microgravity while heading home to Earth!'
+    ? 'You learned why rover teams plan every watt, why a two-stage rocket drops Stage 1 to get lighter, why a Mars rocket must steer itself, and how astronauts stay healthy while floating in space!'
     : isMission2
     ? 'You used ground-penetrating radar (RIMFAX) across an ancient river valley, discovered how thick stone lava tubes block 95% of space rays, and sealed Rock Tube #14 before escaping the shaking Marsquake!'
     : 'You learned why astronauts repair gear with spare parts, why radio messages between Mars and Earth take several minutes, and why thin-air Mars dust storms mean crews must hurry indoors!';
@@ -103,7 +103,7 @@ export const MissionCompleteModal: React.FC<MissionCompleteModalProps> = ({
           </p>
           <p className="text-xs font-mono-hud text-slate-300 mt-2">
             {isMission3
-              ? 'Every trade-off you made in power, air, shielding, and zero-G health brought everyone home!'
+              ? 'Your smart power fix, careful steering, and healthy space habits brought everyone home!'
               : isMission2
               ? 'Next step: launch the Mars Rocket in Mission 3 or explore your unlocked NASA findings!'
               : 'Next step: use Earth’s rescue plan in Mission 2 (Cave Shield & Rock #14) or inspect your NASA findings!'}
@@ -150,40 +150,9 @@ export const MissionCompleteModal: React.FC<MissionCompleteModalProps> = ({
                 </b>
               </p>
             )}
-            {isMission3 && stats.breakerChoice && (
+            {isMission3 && (
               <p>
-                • Rover 400W Power Choice:{' '}
-                <b className="text-white">
-                  {stats.breakerChoice === 'shield'
-                    ? 'Ray & Dust Shield (cut dust tornado damage in half!)'
-                    : stats.breakerChoice === 'scanner'
-                    ? 'Rock Scanner (+25 extra Science Points!)'
-                    : 'Battery Boost (+15% extra power saved!)'}
-                </b>
-              </p>
-            )}
-            {isMission3 && stats.m3LaunchChoice && (
-              <p>
-                • Rocket Launch Setup:{' '}
-                <b className="text-white">
-                  {stats.m3LaunchChoice === 'heavy_shield'
-                    ? 'Heavy Heat-Shield Hull (+20% Shielding, steady climb)'
-                    : stats.m3LaunchChoice === 'light_autopilot'
-                    ? 'Ultra-Light Auto-Pilot (24% faster climb, sharp steering)'
-                    : 'Extra Science & Veggie Pod (+35 Science, steered through crosswinds)'}
-                </b>
-              </p>
-            )}
-            {isMission3 && stats.m3HealthBoostChoice && (
-              <p>
-                • Return Ship Crew Boost:{' '}
-                <b className="text-white">
-                  {stats.m3HealthBoostChoice === 'fitness'
-                    ? 'Space Health Lab (+20 Science)'
-                    : stats.m3HealthBoostChoice === 'shield'
-                    ? 'Solar Ray Shield (+15% Final Shielding)'
-                    : 'Greenhouse Air (+15% Life Support & +10 Science)'}
-                </b>
+                • Rover power: <b className="text-white">Turned off broken Heater #2 (320 W of 400 W used)</b>
               </p>
             )}
           </div>

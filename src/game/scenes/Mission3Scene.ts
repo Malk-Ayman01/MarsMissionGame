@@ -520,14 +520,9 @@ export class Mission3Scene extends Phaser.Scene {
           pickup.sprite.setVisible(false);
           this.battery = Math.min(100, this.battery + 15);
           this.condition = Math.min(100, this.condition + 10);
-          const scanBonus = this.breakerChoice === 'scanner' ? 15 : 10;
-          this.scienceScore += scanBonus;
+          this.scienceScore += 10;
           sounds.playPickup();
-          this.callbacks.onWarning(
-            this.breakerChoice === 'scanner'
-              ? 'ROCK SCANNER + CELL! +15% Battery, +10% Shield & +15 Science!'
-              : 'ENERGY CELL! +15% Battery & +10% Shield!'
-          );
+          this.callbacks.onWarning('ENERGY CELL! +15% Battery & +10% Shield!');
         }
       }
     }
@@ -663,22 +658,11 @@ export class Mission3Scene extends Phaser.Scene {
       const dist = Phaser.Math.Distance.Between(px, py, dd.sprite.x, dd.sprite.y);
       if (dist < 65 && this.elapsedSeconds - this.lastDustDevilHitTime > 3.0) {
         this.lastDustDevilHitTime = this.elapsedSeconds;
-        const shieldProtected = this.breakerChoice === 'shield';
-        const modeHitMult = this.explorerMode === 'junior' ? 0.7 : 1.0;
-        const batLoss = Math.max(2, Math.round((shieldProtected ? 4 : 8) * modeHitMult));
-        const condLoss = Math.max(
-          2,
-          Math.round((shieldProtected ? 3 : 7 * Math.min(1.3, this.shieldingMult)) * modeHitMult)
-        );
+        const batLoss = this.explorerMode === 'junior' ? 2 : 4;
         this.battery = Math.max(0, this.battery - batLoss);
-        this.condition = Math.max(0, this.condition - condLoss);
-        this.cameras.main.shake(250, 0.018);
+        this.cameras.main.shake(150, 0.008);
         sounds.playCrash();
-        this.callbacks.onWarning(
-          shieldProtected
-            ? `Shield absorbed half the Dust Tornado! (-${batLoss}% Battery, -${condLoss}% Shield)`
-            : `WHOA! Dust tornado hit! Lost ${batLoss}% battery and ${condLoss}% shield!`
-        );
+        this.callbacks.onWarning(`Dust devil! Mars air is too thin to hurt us, but dust got in the wheels (-${batLoss}% Battery)`);
         this.callbacks.onDialogueTrigger('m3_dust_devil_hit');
       }
     });
@@ -754,7 +738,7 @@ export class Mission3Scene extends Phaser.Scene {
       });
 
       if (distToGantry < 115) {
-        prompt = 'Press [E] Prepare Mars Rocket & Launch!';
+        prompt = 'Press [E] Load Rock Tube #14 & Launch!';
         if (ePressed && this.eKeyCooldown <= 0) {
           this.eKeyCooldown = 0.6;
           actionTriggered = true;
@@ -764,11 +748,9 @@ export class Mission3Scene extends Phaser.Scene {
           this.roverSpeed = 0;
           sounds.stopEngine();
           this.callbacks.onPromptChange(null);
-          if (this.callbacks.onOpenLaunchDecision) {
-            this.callbacks.onOpenLaunchDecision();
-          } else {
-            this.confirmLaunchChoice('heavy_shield');
-          }
+          // No rocket-setup choice anymore: there is one rocket design (NASA's two-stage
+          // Mars Ascent Vehicle concept), so we launch it directly.
+          this.confirmLaunchChoice('heavy_shield');
         }
       }
     }
@@ -792,28 +774,18 @@ export class Mission3Scene extends Phaser.Scene {
     this.callbacks.onPromptChange(prompt);
   }
 
-  public toggleBreakerTriage(choice: BreakerAllocationChoice = 'shield') {
+  public toggleBreakerTriage(_choice: BreakerAllocationChoice = 'eco') {
     if (this.breakersSolved) return;
     sounds.playSwitchClick();
     this.breakers.auxBus2 = false;
-    this.breakerChoice = choice;
-    this.breakers.spectrometer = choice === 'scanner';
+    this.breakers.spectrometer = false;
+    this.breakerChoice = 'eco';
     this.breakersSolved = true;
 
-    if (choice === 'shield') {
-      this.shieldingMult *= 0.5;
-      this.batteryMult *= 1.25;
-      this.callbacks.onWarning('400W SHIELD ON! Half tornado damage, but +25% Battery drain!');
-    } else if (choice === 'scanner') {
-      this.scienceScore += 25;
-      this.batteryMult *= 1.25;
-      this.callbacks.onWarning('400W SCANNER ON (+25 Science)! Uses +25% Battery — dodge tornadoes!');
-    } else {
-      this.battery = Math.min(100, this.battery + 15);
-      this.batteryMult *= 0.8;
-      this.shieldingMult *= 1.25;
-      this.callbacks.onWarning('320W ECO (+15% Battery & -20% draw)! Shielding is lighter (+25% wear).');
-    }
+    // Turning off a part that wastes power makes the battery last longer.
+    this.battery = Math.min(100, this.battery + 15);
+    this.batteryMult *= 0.8;
+    this.callbacks.onWarning('Broken heater OFF! We now use 320 W of our 400 W. The battery will last longer!');
 
     sounds.playObjectiveStinger();
     this.callbacks.onDialogueTrigger('m3_bus_isolated');
@@ -933,7 +905,7 @@ export class Mission3Scene extends Phaser.Scene {
       );
     }
 
-    const targetGravityTurnDeg = Math.min(28, (this.mavAltitudeKm / 95) * 28);
+    const targetGravityTurnDeg = Math.min(28, (this.mavAltitudeKm / 285) * 28);
     const pitchError = Math.abs(this.mavPitchDeg - targetGravityTurnDeg);
     const corridorHalfDeg = this.explorerMode === 'junior' ? 13 : 8.5;
     const inCorridor = pitchError <= corridorHalfDeg;
@@ -960,7 +932,7 @@ export class Mission3Scene extends Phaser.Scene {
         : 1.0;
     const efficiency = (inCorridor ? 1.15 : 0.72) * this.ascentSpeedMult * launchSpeedMult;
     this.mavVelocityMs += baseAcc * efficiency * dt;
-    this.mavAltitudeKm += (this.mavVelocityMs * dt) / 360;
+    this.mavAltitudeKm += (this.mavVelocityMs * dt) / 120;
 
     if (!inCorridor && this.elapsedSeconds - this.lastGuidanceWarnTime > 3.5) {
       this.lastGuidanceWarnTime = this.elapsedSeconds;
@@ -1039,26 +1011,26 @@ export class Mission3Scene extends Phaser.Scene {
       const fuelBurn = this.launchChoice === 'science_cargo' ? 10.5 : 8;
       this.mavFuelPercent = Math.max(0, this.mavFuelPercent - fuelBurn * dt);
 
-      if (this.mavAltitudeKm >= 42 || this.mavFuelPercent <= 0) {
+      if (this.mavAltitudeKm >= 126 || this.mavFuelPercent <= 0) {
         if (!this.ascentStagePromptSent) {
           this.ascentStagePromptSent = true;
-          this.callbacks.onWarning('FIRST TANK EMPTY! Press [SPACEBAR] to drop it!');
+          this.callbacks.onWarning('STAGE 1 IS OUT OF FUEL! Press [SPACEBAR] to drop it!');
         }
-        this.callbacks.onPromptChange('Press [SPACEBAR] Drop Empty Tank & Fire Rocket 2!');
+        this.callbacks.onPromptChange('Press [SPACEBAR] to drop Stage 1 and start Stage 2!');
         if (Phaser.Input.Keyboard.JustDown(this.wasd.SPACE) || virtualInput.consumeSpace()) {
           this.executeStageSeparation();
         }
       } else {
         this.callbacks.onPromptChange(
-          `STEER ROCKET [A / D]: Keep white bar inside green box! | Tank 1: ${Math.round(this.mavFuelPercent)}%`
+          `STEER [A / D]: keep the white bar in the green box! | Stage 1 fuel: ${Math.round(this.mavFuelPercent)}%`
         );
       }
     } else {
       this.callbacks.onPromptChange(
-        `FLY TO SPACE [A / D]: Height ${Math.round(this.mavAltitudeKm)}/115 km | Speed ${Math.round(this.mavVelocityMs)}/3500`
+        `FLY TO ORBIT [A / D]: Height ${Math.round(this.mavAltitudeKm)}/343 km | Speed ${Math.round(this.mavVelocityMs)}/3400 m/s`
       );
 
-      if (this.mavAltitudeKm >= 115 && this.mavVelocityMs >= 3200) {
+      if (this.mavAltitudeKm >= 343 && this.mavVelocityMs >= 3200) {
         this.enterOrbitalDockingPhase();
       }
     }
@@ -1116,7 +1088,7 @@ export class Mission3Scene extends Phaser.Scene {
       duration: 2400,
     });
 
-    this.callbacks.onWarning('TANK DROPPED! Rocket 2 is flying fast to space!');
+    this.callbacks.onWarning('Stage 1 dropped! The rocket is lighter, so Stage 2 can go faster!');
     this.callbacks.onDialogueTrigger('m3_stage1_burnout');
   }
 
@@ -1266,8 +1238,8 @@ export class Mission3Scene extends Phaser.Scene {
       rockCollisions: this.rockCollisions,
       hasCoreSample: true,
       breakersConfigured: this.breakersSolved,
-      mavAltitudeKm: 120,
-      mavVelocityMs: 3600,
+      mavAltitudeKm: 343,
+      mavVelocityMs: 3400,
       mavDocked: this.isDocked,
       breakerChoice: this.breakerChoice,
       m3LaunchChoice: this.launchChoice,

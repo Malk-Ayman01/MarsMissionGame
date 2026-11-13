@@ -82,12 +82,12 @@ These are past measurements, not today’s weather.`,
   {
     id: 'space_communications',
     title: 'Radio Delay: Waiting for Earth to Answer!',
-    subtitle: 'Why Messages Take 7 to 42 Minutes Round-Trip',
+    subtitle: 'Why Messages Take About 6 to 44 Minutes Round-Trip',
     category: 'COMMUNICATIONS',
     imageSrc: '/assets/nasa/deep_space_network.jpg',
     imageCaption: 'A giant 70-meter NASA Deep Space Network radio dish on Earth listening to Mars.',
     nasaFact:
-      'Mars is 55 to 401 million kilometers away! Even at the speed of light, a radio "HELLO!" takes 3 to 21 minutes just to arrive on Earth — so waiting for an answer takes up to 42 minutes! That is why Mars crews must make quick safety choices on their own.',
+      'Mars is 55 to 401 million kilometers away! Even at the speed of light, a radio "HELLO!" takes about 3 to 22 minutes just to arrive on Earth — so waiting for an answer can take up to 44 minutes! That is why Mars crews must make quick safety choices on their own.',
     olderKidsNote:
       'Radio waves travel at c = 299,792 km/s. When Mars is near solar conjunction (378+ million km), one-way light-time lag hits ~21 minutes (42 min round trip). NASA rovers use onboard autonomous hazard avoidance instead of Earth joystick control.',
     classroomPrompt:
@@ -221,49 +221,49 @@ These are past measurements, not today’s weather.`,
 
   {
     id: 'sample_caching_heritage',
-    title: 'Saving Power Under Tight Limits (400W Budget)',
-    subtitle: 'Choosing Your Helpful Upgrade When Dust Breaks a Heater',
+    title: 'Every Watt Counts on Mars',
+    subtitle: 'Why Rover Teams Plan Their Power',
     category: 'POWER SYSTEMS',
-    imageSrc: '/assets/nasa/meda_weather_station.jpg',
-    imageCaption: 'Rover weather and heat sensors checking Mars dust.',
+    imageSrc: '/assets/nasa/perseverance_rover.jpg',
+    imageCaption: 'NASA’s Perseverance rover on Mars.',
     nasaFact:
-      'Fine Mars dust sticks to wires and heaters! When one broken part wastes too much electricity, engineers flip it OFF first and choose which helpful tool to boost so the rover reaches the rocket safely.',
+      'NASA’s Perseverance rover makes about 110 watts of electricity. That is about the same as one light bulb! Batteries help when the rover needs more power for a short time.',
     olderKidsNote:
-      'NASA rovers run on careful power budgets (~110–400W active subsystems). Turning off faulty heaters keeps Drive Motors, Life Support, and Science tools running smoothly.',
+      'Perseverance’s nuclear power source (MMRTG) makes about 110 W and charges two batteries. During science work the rover can need up to 900 W, so the team plans which parts are on at the same time. (The 400 W limit and Heater #2 are a game story based on this idea.)',
     classroomPrompt:
-      'Next Task Choice: With Broken Heater #2 switched off, would you like Ray & Dust Shield, Rock Scanner, or Battery Boost for the drive to the rocket?',
+      'Think: If a broken part wastes most of your power, what should you turn off first? What must always stay on?',
     gameContext:
-      'In Mission 3, Hedeya teaches you why Heater #2 drains power—flip it OFF, then pick your favorite helper upgrade for the next task!',
-    sourceName: 'NASA MEDA Sensors',
-    sourceUrl: 'https://mars.nasa.gov/mars2020/spacecraft/instruments/meda/',
+      'In Mission 3, Hedeya shows you that Heater #2 is wasting power. Turn it off so Suit Air and the Wheels fit under 400 W!',
+    sourceName: 'NASA JPL – Perseverance Power System',
+    sourceUrl: 'https://www.jpl.nasa.gov/news/press_kits/mars_2020/launch/mission/spacecraft/power/',
     missionId: 'mission_3',
     unlockedAtStage: 'm3_stage_1_grid_triage',
-    instrumentName: 'Power & Dust Sensors',
-    solObservation: 'Sol 249',
-    datasetType: 'REAL_NASA_OBSERVATION',
+    instrumentName: 'MMRTG Power Source',
+    solObservation: 'Rover Power Planning',
+    datasetType: 'SIMULATED_SCENARIO',
   },
   {
     id: 'mars_ascent_vehicle',
-    title: 'Launching a Rocket Into Microgravity!',
-    subtitle: 'Two-Stage Ascent & Autonomous Orbital Docking',
+    title: 'A Two-Stage Rocket From Mars',
+    subtitle: 'NASA’s Mars Ascent Vehicle Design',
     category: 'NAVIGATION',
-    imageSrc: '/assets/nasa/perseverance_rover.jpg',
-    imageCaption: 'NASA plan to launch Mars rock tubes into orbit around Mars to meet an Earth ship.',
+    imageSrc: '/assets/nasa/sample_core_tube.jpg',
+    imageCaption: 'A sample tube like the ones a Mars rocket would carry to orbit.',
     nasaFact:
-      'A Mars Rocket has two parts: Stage 1 pushes hard up through the sky and drops off when empty. Then Stage 2 zooms into microgravity (where things float gently in orbit!) and lines up on its own because Earth is too far away to steer live!',
+      'NASA engineers designed a small rocket with two parts, called stages. Stage 1 burns its fuel and falls away. That makes the rocket lighter, so Stage 2 can carry the rock samples all the way to orbit around Mars.',
     olderKidsNote:
-      'Mars gravity is ~38% of Earth (3.72 m/s²). Because of the 7–21 minute one-way Earth communication delay, a Mars Ascent Vehicle (MAV) must steer its gravity turn and orbital rendezvous autonomously.',
+      'NASA’s Mars Ascent Vehicle design used two solid rocket motors and aimed for a circular orbit about 343 km above Mars. Radio messages take about 3 to 22 minutes to travel between Earth and Mars, so the rocket must steer itself. In real life no people would ride it: robots would launch the samples. NASA’s Mars Sample Return program lost its funding in 2026, so the samples are still waiting on Mars.',
     classroomPrompt:
-      'Engineering Question: Why could someone on Earth NEVER use a video game controller to steer a Mars rocket landing or launch live?',
+      'Think: Why can’t someone on Earth steer a Mars rocket with a game controller while it is flying?',
     gameContext:
-      'Steer with A and D inside the green box, press SPACE to drop Stage 1, and gently dock in microgravity!',
-    sourceName: 'NASA Mars Sample Return',
-    sourceUrl: 'https://science.nasa.gov/mission/mars-sample-return/',
+      'In the game, YOU are the rocket’s computer: steer with A and D inside the green box, press SPACE to drop Stage 1, then dock in orbit.',
+    sourceName: 'NASA Technical Reports Server – Mars Ascent Vehicle Design',
+    sourceUrl: 'https://ntrs.nasa.gov/citations/20205008210',
     missionId: 'mission_3',
     unlockedAtStage: 'm3_stage_4_mav_ascent',
     instrumentName: 'Mars Ascent Vehicle (MAV)',
-    solObservation: 'Autonomous Orbit',
-    datasetType: 'REAL_NASA_OBSERVATION',
+    solObservation: 'Target Orbit 343 km',
+    datasetType: 'DERIVED_SCIENTIFIC_DATA',
   },
   {
     id: 'astronaut_health_microgravity',
@@ -273,11 +273,11 @@ These are past measurements, not today’s weather.`,
     imageSrc: '/assets/nasa/meda_weather_station.jpg',
     imageCaption: 'Space life-support and environmental sensors keep astronaut crews healthy on long journeys.',
     nasaFact:
-      'Once your rocket reaches orbit and floats in microgravity on the way home to Earth, bodies do not feel weight anymore! Without heavy exercise, astronauts lose bone strength and muscle power, and seeing 16 sunrises a day can mess up sleep clocks.',
+      'In space, astronauts float, so their bones and muscles do not have to hold up their weight. To stay strong, astronauts on the Space Station exercise about 2 hours every day.',
     olderKidsNote:
-      'NASA space biology studies show astronauts work out ~2 hours every day, eat fresh space-grown veggies for their immune shield, and use blue-tuned cabin lighting to keep healthy sleep cycles on the long flight back from Mars.',
+      'Even with exercise, astronauts can lose about 1% of their bone density each month in space. NASA also uses special lights to help sleep (brighter and bluer in the morning, dimmer and redder at night), and astronauts have grown and eaten fresh lettuce on the Space Station.',
     classroomPrompt:
-      'Crew Health Check: Which daily habits keep bones, muscles, sleep, and immune cells strong when floating in zero gravity?',
+      'Think: Which daily habits keep bones, muscles, and sleep healthy when you float in space?',
     gameContext:
       'Open the Space Facts Book -> Crew Health tab anytime to explore real space biology discoveries on bones, muscles, sleep, and immunity!',
     sourceName: 'NASA Open Science Data Repository',
@@ -432,7 +432,7 @@ export const DIALOGUE_SCRIPTS: Record<string, DialogueLine[]> = {
       speaker: 'HEDEYA',
       characterId: 'hedeya',
       callsign: 'FIX-IT ENGINEER',
-      text: 'Mars dust jammed Rover Heater #2 ON, stealing 380W out of our 400W power limit! Walk to the rover [E] to shut off the broken heater and pick your storm upgrade.',
+      text: 'Mars dust jammed Heater #2 ON. It uses 380 W, and our rover can only use 400 W at once! Walk to the rover and press [E] to turn it off.',
     },
   ],
   m3_bus_isolated: [
@@ -441,7 +441,7 @@ export const DIALOGUE_SCRIPTS: Record<string, DialogueLine[]> = {
       speaker: 'HEDEYA',
       characterId: 'hedeya',
       callsign: 'FIX-IT ENGINEER',
-      text: 'Smart power budget! Now wheels and Suit Air have full power—drive east past the dust tornadoes to load Rock Tube #14 onto the Mars Rocket!',
+      text: 'Great! Now Suit Air and the Wheels have enough power. Drive east to the rocket pad. Watch out for dust devils!',
     },
   ],
   m3_dust_devil_hit: [
@@ -450,7 +450,7 @@ export const DIALOGUE_SCRIPTS: Record<string, DialogueLine[]> = {
       speaker: 'SAMANTHA',
       characterId: 'samantha',
       callsign: 'SPACE SCIENTIST',
-      text: 'Whoa, dust tornado strike! Dust swirls scrape your Shielding—steer wide around them and grab Energy Cells!',
+      text: 'A dust devil! Mars air is very thin, so it can’t flip us over. But dust gets into the wheels and uses battery. Drive around them!',
     },
   ],
   m3_mav_reached: [
@@ -459,7 +459,7 @@ export const DIALOGUE_SCRIPTS: Record<string, DialogueLine[]> = {
       speaker: 'HAZALOOM',
       characterId: 'hazaloom',
       callsign: 'ROVER PARTNER',
-      text: 'There is our Mars Ascent Rocket! Pull onto the yellow pad and press [E]—remember, Earth is too far away to steer live, so you are flying us up!',
+      text: 'There is the Mars rocket! Park on the yellow pad and press [E] to load Rock Tube #14.',
     },
   ],
   m3_launch_ignited: [
@@ -468,7 +468,7 @@ export const DIALOGUE_SCRIPTS: Record<string, DialogueLine[]> = {
       speaker: 'HEDEYA',
       characterId: 'hedeya',
       callsign: 'FIX-IT ENGINEER',
-      text: 'LIFTOFF! Radio signals take minutes to reach Earth, so keep the white line inside the green climb box yourself with [A] and [D]!',
+      text: 'LIFTOFF! Radio messages take minutes to reach Earth, so the rocket must steer itself. Today YOU are its computer! Keep the white line in the green box with [A] and [D].',
     },
   ],
   m3_stage1_burnout: [
@@ -477,7 +477,7 @@ export const DIALOGUE_SCRIPTS: Record<string, DialogueLine[]> = {
       speaker: 'HEDEYA',
       characterId: 'hedeya',
       callsign: 'FIX-IT ENGINEER',
-      text: 'Stage 1 fuel empty! Press [SPACEBAR] to drop the heavy empty tank so Rocket Stage 2 can push us into orbit!',
+      text: 'Stage 1 is out of fuel! Press [SPACEBAR] to drop it. A lighter rocket goes faster!',
     },
   ],
   m3_orbital_dock: [
@@ -486,7 +486,7 @@ export const DIALOGUE_SCRIPTS: Record<string, DialogueLine[]> = {
       speaker: 'SAMANTHA',
       characterId: 'samantha',
       callsign: 'SPACE SCIENTIST',
-      text: 'We reached microgravity! Nothing stops you automatically in space—gently tap [WASD] or Arrows to line up with our Home Spaceship ring!',
+      text: 'We are in orbit! Things keep moving in space until something stops them, so tap [WASD] gently to line up with the spaceship ring.',
     },
   ],
   m3_ending: [
@@ -495,7 +495,7 @@ export const DIALOGUE_SCRIPTS: Record<string, DialogueLine[]> = {
       speaker: 'HAZALOOM',
       characterId: 'hazaloom',
       callsign: 'ROVER PARTNER',
-      text: 'DOCKED SAFE AND HEALTHY! Thanks to your smart choices, all three of us are flying home to Earth!',
+      text: 'Docked! Thank you, Mission Control. All three of us are flying home to Earth!',
     },
   ],
 };
