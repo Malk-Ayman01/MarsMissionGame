@@ -84,17 +84,17 @@ const EVENT_CONFIGS: Record<CinematicEventType, EventConfig> = {
     ],
   },
   mission_3_launch_crisis: {
-    badge: 'MISSION 3 EVENT // DUST CYCLONE & LIFTOFF!',
-    title: 'Emergency Rocket Ignition',
+    badge: 'MISSION 3 EVENT // LIFTOFF!',
+    title: 'Rocket Launch',
     description:
-      'Giant dust tornadoes sweep across the launchpad as you load Rock Tube #14 and lift off! Earth is too far away to joystick this flight—you steer the rocket yourself!',
+      'Rock Tube #14 is loaded and the crew is ready. Earth is too far away to steer this flight live, so you are the rocket’s computer!',
     defaultPaths: ['/assets/cinematic/mission3_event.mp4'],
     uploadPathHint: '',
     continueLabel: 'Launch & Steer Rocket!',
     themeColor: 'red',
     cues: [
-      { start: 0.4, end: 4.5, speaker: 'SAMANTHA', speakerColor: 'text-emerald-300', text: 'Dust tornadoes are closing in on the pad—there is no time to wait!' },
-      { start: 4.5, end: 9.0, speaker: 'HEDEYA', speakerColor: 'text-sky-300', text: 'Rock Tube #14 and all 3 crew seats are locked! Earth cannot steer from 200M km away!' },
+      { start: 0.4, end: 4.5, speaker: 'SAMANTHA', speakerColor: 'text-emerald-300', text: 'Rock Tube #14 is loaded. All systems are ready!' },
+      { start: 4.5, end: 9.0, speaker: 'HEDEYA', speakerColor: 'text-sky-300', text: 'Radio messages to Earth take minutes, so nobody there can steer us live!' },
       { start: 9.0, end: 14.0, speaker: 'HAZALOOM', speakerColor: 'text-amber-400', text: 'You have the controls! Igniting thrusters in 3... 2... 1... LIFTOFF!' },
     ],
   },
