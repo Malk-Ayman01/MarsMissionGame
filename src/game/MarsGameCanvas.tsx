@@ -103,6 +103,9 @@ export const MarsGameCanvas: React.FC<MarsGameCanvasProps> = ({
       // ------ MODIFIED PART ----------
       onMission2TermLearned: (term) =>
   callbacksRef.current.onMission2TermLearned?.(term),
+
+      onMission2QuizRequested: (quizId) =>
+  callbacksRef.current.onMission2QuizRequested?.(quizId),
       // ---------------
     };
 

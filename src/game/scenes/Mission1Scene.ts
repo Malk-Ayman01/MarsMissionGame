@@ -37,6 +37,8 @@ export interface SceneCallbacks {
   title: string;
   explanation: string;
 }) => void;
+
+onMission2QuizRequested?: (quizId: string) => void;
 // -----------------
 }
 

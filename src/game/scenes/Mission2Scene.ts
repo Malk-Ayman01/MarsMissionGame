@@ -111,6 +111,8 @@ export class Mission2Scene extends Phaser.Scene {
 // -------- MODIFIED PART ----------
   private learnedTerms = new Set<string>();
 
+  
+
 private readonly mission2Terms: Record<
   string,
   { title: string; explanation: string }
@@ -168,6 +170,8 @@ private teachTerm(termId: string) {
     explanation: term.explanation,
   });
 }
+
+
 // -----------------------
 
   public preload() {
@@ -388,12 +392,13 @@ private teachTerm(termId: string) {
     // sounds.playObjectiveStinger();
 
     //---------- MODIFIED PART ---------
-    this.callbacks.onFactUnlock('rimfax_subsurface_radar');
+this.callbacks.onFactUnlock('rimfax_subsurface_radar');
 this.teachTerm('rimfax_subsurface_radar');
 
 this.callbacks.onStageChange(this.stage);
 this.callbacks.onDialogueTrigger('m2_stage1_start');
-sounds.playObjectiveStinger(); 
+this.callbacks.onMission2QuizRequested?.('rimfax');
+sounds.playObjectiveStinger();
 
 // ----------------------
   }
@@ -491,6 +496,7 @@ sounds.playObjectiveStinger();
 
   public update(_time: number, delta: number) {
     if (
+   
       this.isPlanningFrozen ||
       this.isReadingPaused ||
       this.stage === 'm2_cinematic_ending' ||
@@ -812,6 +818,7 @@ sounds.playObjectiveStinger();
           this.callbacks.onWarning('SENSOR 1 ACTIVE! -6% Battery power used, +15 Science!');
           this.callbacks.onFactUnlock('neretva_vallis_floods');
           this.callbacks.onDialogueTrigger('m2_beacon1_placed');
+          this.callbacks.onMission2QuizRequested?.('sensors');
           this.callbacks.onStageChange(this.stage);
         }
       }
@@ -872,6 +879,7 @@ sounds.playObjectiveStinger();
           this.astronaut.setPosition(this.cavePortalExit.x, this.cavePortalExit.y);
           sounds.playObjectiveStinger();
           this.callbacks.onDialogueTrigger('m2_cave_entry');
+          this.callbacks.onMission2QuizRequested?.('cave');
 
           this.stage = 'm2_stage_4_sample_extraction';
           this.callbacks.onStageChange(this.stage);
@@ -988,6 +996,9 @@ sounds.playObjectiveStinger();
     this.callbacks.onFactUnlock('neretva_vallis_floods');
     this.callbacks.onStageChange(this.stage);
     this.callbacks.onDialogueTrigger('m2_beacon1_placed');
+    // ----------- MODIFIED PART -------------
+this.callbacks.onMission2QuizRequested?.('sensors');
+    // ----------------
     sounds.playObjectiveStinger();
   }
 
@@ -1028,6 +1039,7 @@ sounds.playObjectiveStinger();
 this.teachTerm('core_sample');
 
 this.callbacks.onDialogueTrigger('m2_sample_drilled');
+this.callbacks.onMission2QuizRequested?.('sample');
 
 
     // -----------------
@@ -1066,6 +1078,7 @@ this.callbacks.onDialogueTrigger('m2_sample_drilled');
     sounds.playWarningAlarm();
     sounds.playObjectiveStinger();
     this.callbacks.onDialogueTrigger('m2_tremor_alert');
+    this.callbacks.onMission2QuizRequested?.('marsquake');
 
     // --------- MODIFIED PART -----------
     this.teachTerm('marsquake');
