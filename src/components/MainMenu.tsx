@@ -276,7 +276,8 @@ export const MainMenu: React.FC<MainMenuProps> = ({
             }`}
           >
             <div className="flex items-center justify-between text-[10px] font-mono-hud font-bold">
-              <span className="text-amber-300">AGES 11–15 // SENIOR COMMANDER</span>
+                           {/* <span className="text-amber-300">AGES 11–15 // SENIOR COMMANDER</span> */}
+              <span className="text-amber-300">AGES 11+ // SENIOR EXPLORER</span>
               {explorerMode === 'commander' && (
                 <span className="px-1.5 py-0.5 bg-amber-400 text-black text-[9px]">ACTIVE</span>
               )}
