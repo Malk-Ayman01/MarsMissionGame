@@ -132,6 +132,14 @@ const MISSION_2_QUIZ: Record<string, Mission2QuizQuestion> = {
   },
 };
 
+const MISSION_2_QUIZ_ORDER = [
+  'rimfax',
+  'sensors',
+  'cave',
+  'sample',
+  'marsquake',
+] as const;
+
 // -------------------------
 
 function loadCompletedMissions(): MissionId[] {
@@ -209,9 +217,19 @@ const [mission2QuizResults, setMission2QuizResults] = useState<
   { quizId: string; selectedAnswer: number; correct: boolean }[]
 >([]);
 
-const activeMission2Quiz = activeMission2QuizId
-  ? MISSION_2_QUIZ[activeMission2QuizId] ?? null
-  : null;
+// ------------ MODIFIED PART --------------
+const [mission2QuizIndex, setMission2QuizIndex] = useState(0);
+
+const activeMission2Quiz =
+  activeMission2QuizId === 'final' &&
+  mission2QuizIndex < MISSION_2_QUIZ_ORDER.length
+    ? MISSION_2_QUIZ[MISSION_2_QUIZ_ORDER[mission2QuizIndex]]
+    : null;
+//------------------
+
+// const activeMission2Quiz = activeMission2QuizId
+//   ? MISSION_2_QUIZ[activeMission2QuizId] ?? null
+//   : null;
 
 const activeMission2QuizResult = activeMission2Quiz
   ? mission2QuizResults.find(
@@ -410,8 +428,11 @@ const activeMission2QuizResult = activeMission2Quiz
 onMission2QuizRequested: (quizId) => {
   console.log('[Mission 2] Quiz requested:', quizId);
 
-  if (activeMission === 'mission_2' && MISSION_2_QUIZ[quizId]) {
-    setPendingMission2QuizId(quizId);
+  if (activeMission === 'mission_2' && quizId === 'final') {
+    setMission2QuizIndex(0);
+    setMission2QuizResults([]);
+    setSelectedMission2Answer(null);
+    setPendingMission2QuizId('final');
   }
 },
 
@@ -438,10 +459,10 @@ onMission2QuizRequested: (quizId) => {
       return;
     }
 
-    if (!MISSION_2_QUIZ[pendingMission2QuizId]) {
-      setPendingMission2QuizId(null);
-      return;
-    }
+   if (pendingMission2QuizId !== 'final') {
+  setPendingMission2QuizId(null);
+  return;
+}
 
     setActiveMission2QuizId(pendingMission2QuizId);
     setPendingMission2QuizId(null);
@@ -483,10 +504,11 @@ onMission2QuizRequested: (quizId) => {
          // -------- MODIFIED PART ----------
       setMission2TermPopup(null);
 
-      setPendingMission2QuizId(null);
+    setPendingMission2QuizId(null);
 setActiveMission2QuizId(null);
 setSelectedMission2Answer(null);
 setMission2QuizResults([]);
+setMission2QuizIndex(0);
       // --------------
     setStage(
       missionId === 'mission_3'
@@ -584,6 +606,7 @@ setMission2QuizResults([]);
 setActiveMission2QuizId(null);
 setSelectedMission2Answer(null);
 setMission2QuizResults([]);
+setMission2QuizIndex(0);
 
     // ----------------
     setFactQueue([]);
@@ -896,10 +919,19 @@ activeMission2QuizId !== null ||
                 if (stage === 'm3_cinematic_ending') {
                   markMissionComplete('mission_3');
                   setActiveEventCinematic('mission_3_final_home');
-                } else if (stage === 'cinematic_ending' || stage === 'm2_cinematic_ending') {
-                  markMissionComplete(activeMission);
-                  setScreenState('mission_complete');
-                }
+                // } else if (stage === 'cinematic_ending' || stage === 'm2_cinematic_ending') {
+                //   markMissionComplete(activeMission);
+                //   setScreenState('mission_complete');
+                // }
+
+                // ------------------ MODIFIED PART -----------
+} else if (stage === 'm2_cinematic_ending') {
+  markMissionComplete('mission_2');
+} else if (stage === 'cinematic_ending') {
+  markMissionComplete(activeMission);
+  setScreenState('mission_complete');
+}
+                //---------------------
               }}
             />
           )}
@@ -1036,20 +1068,89 @@ activeMission2QuizId !== null ||
             Check Answer
           </button>
         ) : (
+
+
+
+          //---------------- MODIFIED PART --------------
           <button
-            type="button"
-            onClick={() => {
-              setActiveMission2QuizId(null);
-              setSelectedMission2Answer(null);
-            }}
-            className="w-full rounded-xl bg-cyan-400 px-6 py-3 font-black text-slate-950 transition hover:bg-cyan-300"
-          >
-            Continue Mission
-          </button>
+  type="button"
+  onClick={() => {
+    if (mission2QuizIndex < MISSION_2_QUIZ_ORDER.length - 1) {
+      setMission2QuizIndex((prev) => prev + 1);
+      setSelectedMission2Answer(null);
+    } else {
+      setMission2QuizIndex(MISSION_2_QUIZ_ORDER.length);
+      setSelectedMission2Answer(null);
+    }
+  }}
+  className="w-full rounded-xl bg-cyan-400 px-6 py-3 font-black text-slate-950 transition hover:bg-cyan-300"
+>
+  {mission2QuizIndex < MISSION_2_QUIZ_ORDER.length - 1
+    ? 'Next Question'
+    : 'See Final Result'}
+</button>
+          //-------------------------
+          // <button
+          //   type="button"
+          //   onClick={() => {
+          //     setActiveMission2QuizId(null);
+          //     setSelectedMission2Answer(null);
+          //   }}
+
+      
+          //   className="w-full rounded-xl bg-cyan-400 px-6 py-3 font-black text-slate-950 transition hover:bg-cyan-300"
+          // >
+          //   Continue Mission
+          // </button>
         )}
       </div>
     </div>
   )}
+
+
+   {/* ---------------MODIFIED PART ----------------- */}
+
+{activeMission2QuizId === 'final' &&
+  mission2QuizIndex >= MISSION_2_QUIZ_ORDER.length &&
+  screenState === 'playing' &&
+  activeMission === 'mission_2' && (
+    <div className="absolute inset-0 z-[90] flex items-center justify-center bg-black/80 p-4">
+      <div className="w-full max-w-xl rounded-2xl border-2 border-cyan-400 bg-slate-950 p-6 text-center shadow-2xl">
+        <div className="mb-3 text-xs font-bold tracking-[0.25em] text-cyan-300">
+          MISSION 2 COMPLETE
+        </div>
+
+        <h2 className="mb-4 text-3xl font-black text-white">
+          Final Knowledge Check
+        </h2>
+
+        <p className="mb-3 text-2xl font-black text-cyan-300">
+          {mission2QuizResults.filter((result) => result.correct).length}
+          {' / '}
+          {MISSION_2_QUIZ_ORDER.length}
+        </p>
+
+        <p className="mb-6 text-slate-200">
+          You finished all five science questions!
+        </p>
+
+        <button
+          type="button"
+          onClick={() => {
+            setActiveMission2QuizId(null);
+            setPendingMission2QuizId(null);
+            setSelectedMission2Answer(null);
+            setMission2QuizIndex(0);
+            setScreenState('mission_complete');
+          }}
+          className="w-full rounded-xl bg-cyan-400 px-6 py-3 font-black text-slate-950 transition hover:bg-cyan-300"
+        >
+          Finish Mission
+        </button>
+      </div>
+    </div>
+  )}
+   {/* -------------------------- */}
 
 
           {/* -------------------------- */}
