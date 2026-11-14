@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { MissionStats, MissionId } from '../types/game';
 import { sounds } from '../audio/SoundManager';
 import { PixelIcon } from './PixelIcon';
@@ -30,33 +30,9 @@ export const MissionCompleteModal: React.FC<MissionCompleteModalProps> = ({
 
   const isMission2 = stats.missionId === 'mission_2';
   const isMission3 = stats.missionId === 'mission_3';
-  const isMission1 = stats.missionId === 'mission_1';
-  const [mission1CheckIndex, setMission1CheckIndex] = useState(0);
-  const [mission1CheckPassed, setMission1CheckPassed] = useState(false);
-  const [mission1CheckComplete, setMission1CheckComplete] = useState(false);
-  const [mission1CheckFeedback, setMission1CheckFeedback] = useState('');
-
-  const mission1Checks = [
-    {
-      question: 'What does Jezero Crater tell us about Mars long ago?',
-      answers: ['A river once flowed into a lake there.', 'Wind alone made the fan-shaped delta.', 'The rocks were made by a recent volcano.'],
-      correct: 0,
-    },
-    {
-      question: 'Why can a message from Mars take minutes to reach Earth?',
-      answers: ['Radio waves need time to cross the huge distance.', 'Mars turns too slowly to send a quick reply.', 'The message must travel through the rover’s wheels.'],
-      correct: 0,
-    },
-    {
-      question: 'What can a thick dust storm do on Mars?',
-      answers: ['Scatter and block some sunlight before it reaches the ground.', 'Make sunlight travel more slowly through space.', 'Make the Sun produce less energy.'],
-      correct: 0,
-    },
-  ];
-  const activeMission1Check = mission1Checks[mission1CheckIndex];
 
   const learnedSummary = isMission3
-    ? 'You learned why rover teams plan every watt, why a two-stage rocket drops Stage 1 to get lighter, why a Mars rocket must steer itself, and how astronauts stay healthy while floating in space!'
+    ? 'You learned why dusty rover parts must be shut down inside a 400W power budget, how a two-stage Mars Rocket drops its empty tank cleanly, and how astronauts dock safely in microgravity while heading home to Earth!'
     : isMission2
     ? 'You used ground-penetrating radar (RIMFAX) across an ancient river valley, discovered how thick stone lava tubes block 95% of space rays, and sealed Rock Tube #14 before escaping the shaking Marsquake!'
     : 'You learned why astronauts repair gear with spare parts, why radio messages between Mars and Earth take several minutes, and why thin-air Mars dust storms mean crews must hurry indoors!';
@@ -103,7 +79,7 @@ export const MissionCompleteModal: React.FC<MissionCompleteModalProps> = ({
           </p>
           <p className="text-xs font-mono-hud text-slate-300 mt-2">
             {isMission3
-              ? 'Your smart power fix, careful steering, and healthy space habits brought everyone home!'
+              ? 'Every trade-off you made in power, air, shielding, and zero-G health brought everyone home!'
               : isMission2
               ? 'Next step: launch the Mars Rocket in Mission 3 or explore your unlocked NASA findings!'
               : 'Next step: use Earth’s rescue plan in Mission 2 (Cave Shield & Rock #14) or inspect your NASA findings!'}
@@ -130,6 +106,23 @@ export const MissionCompleteModal: React.FC<MissionCompleteModalProps> = ({
                 • Strategy Picked: <b className="text-white">{stats.tradeOffTitle}</b>
               </p>
             )}
+                        {stats.tradeOffChoice && (
+              <div className="mt-1.5 p-2 bg-black/40 border border-amber-500/40 space-y-1 normal-case">
+                <p className="text-emerald-300">
+                  GAINED: {stats.tradeOffChoice.gainText}
+                </p>
+                <p className="text-red-300">
+                  COST: {stats.tradeOffChoice.costText}
+                </p>
+                <p className="text-sky-200">
+                  Real mission planners face this too: {stats.tradeOffChoice.realScienceNote}
+                </p>
+                <p className="text-slate-300">
+                  YOUR RESULT: Suit Air {Math.round(stats.finalOxygen)}% · Battery{' '}
+                  {Math.round(stats.finalBattery)}% · Shield {Math.round(stats.finalCondition)}%
+                </p>
+              </div>
+            )}
             {!isMission2 && !isMission3 && stats.m1StormChoice && (
               <p>
                 • Radio Tower Decision:{' '}
@@ -150,9 +143,40 @@ export const MissionCompleteModal: React.FC<MissionCompleteModalProps> = ({
                 </b>
               </p>
             )}
-            {isMission3 && (
+            {isMission3 && stats.breakerChoice && (
               <p>
-                • Rover power: <b className="text-white">Turned off broken Heater #2 (320 W of 400 W used)</b>
+                • Rover 400W Power Choice:{' '}
+                <b className="text-white">
+                  {stats.breakerChoice === 'shield'
+                    ? 'Ray & Dust Shield (cut dust tornado damage in half!)'
+                    : stats.breakerChoice === 'scanner'
+                    ? 'Rock Scanner (+25 extra Science Points!)'
+                    : 'Battery Boost (+15% extra power saved!)'}
+                </b>
+              </p>
+            )}
+            {isMission3 && stats.m3LaunchChoice && (
+              <p>
+                • Rocket Launch Setup:{' '}
+                <b className="text-white">
+                  {stats.m3LaunchChoice === 'heavy_shield'
+                    ? 'Heavy Heat-Shield Hull (+20% Shielding, steady climb)'
+                    : stats.m3LaunchChoice === 'light_autopilot'
+                    ? 'Ultra-Light Auto-Pilot (24% faster climb, sharp steering)'
+                    : 'Extra Science & Veggie Pod (+35 Science, steered through crosswinds)'}
+                </b>
+              </p>
+            )}
+            {isMission3 && stats.m3HealthBoostChoice && (
+              <p>
+                • Return Ship Crew Boost:{' '}
+                <b className="text-white">
+                  {stats.m3HealthBoostChoice === 'fitness'
+                    ? 'Space Health Lab (+20 Science)'
+                    : stats.m3HealthBoostChoice === 'shield'
+                    ? 'Solar Ray Shield (+15% Final Shielding)'
+                    : 'Greenhouse Air (+15% Life Support & +10 Science)'}
+                </b>
               </p>
             )}
           </div>
@@ -220,81 +244,6 @@ export const MissionCompleteModal: React.FC<MissionCompleteModalProps> = ({
           </div>
         </div>
 
-        {isMission1 && (
-          <div className="mb-5 p-4 bg-[#141a15] border-2 border-[#355a44]">
-            {!mission1CheckComplete ? (
-              <>
-                <div className="flex items-center justify-between gap-2 mb-2">
-                  <span className="font-mono-hud text-[10px] text-emerald-300">
-                    BEFORE THE NEXT MISSION
-                  </span>
-                  <span className="font-mono-hud text-[10px] text-slate-400">
-                    {mission1CheckIndex + 1} / {mission1Checks.length}
-                  </span>
-                </div>
-                <p className="font-mono-hud text-xs sm:text-sm text-white leading-relaxed mb-3">
-                  {activeMission1Check.question}
-                </p>
-                <div className="grid grid-cols-1 gap-2">
-                  {activeMission1Check.answers.map((answer, index) => (
-                    <button
-                      key={`${mission1CheckIndex}-${index}`}
-                      type="button"
-                      disabled={mission1CheckPassed}
-                      onClick={() => {
-                        if (index === activeMission1Check.correct) {
-                          setMission1CheckPassed(true);
-                          setMission1CheckFeedback('That’s right!');
-                          sounds.playPickup();
-                        } else {
-                          setMission1CheckFeedback('Not quite — try again!');
-                        }
-                      }}
-                      className={`px-3 py-2 text-left border font-mono-hud text-xs transition-colors ${
-                        mission1CheckPassed && index === activeMission1Check.correct
-                          ? 'bg-emerald-900/60 border-emerald-400 text-emerald-200'
-                          : 'bg-[#0d110e] border-[#355a44] text-slate-200 hover:border-emerald-400 hover:text-white'
-                      } ${mission1CheckPassed ? 'cursor-default' : 'cursor-pointer'}`}
-                    >
-                      {answer}
-                    </button>
-                  ))}
-                </div>
-                {mission1CheckFeedback && (
-                  <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
-                    <span className={`font-mono-hud text-xs ${mission1CheckPassed ? 'text-emerald-300' : 'text-amber-300'}`}>
-                      {mission1CheckFeedback}
-                    </span>
-                    {mission1CheckPassed && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (mission1CheckIndex === mission1Checks.length - 1) {
-                            setMission1CheckComplete(true);
-                          } else {
-                            setMission1CheckIndex((current) => current + 1);
-                            setMission1CheckPassed(false);
-                            setMission1CheckFeedback('');
-                          }
-                        }}
-                        className="pixel-btn px-3 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-black font-title text-[10px] cursor-pointer"
-                      >
-                        {mission1CheckIndex === mission1Checks.length - 1 ? 'Finish' : 'Next'}
-                        <PixelIcon name="arrowRight" className="w-3 h-3 inline ml-1" />
-                      </button>
-                    )}
-                  </div>
-                )}
-              </>
-            ) : (
-              <p className="font-mono-hud text-xs text-emerald-300">
-                <PixelIcon name="check" className="w-4 h-4 inline mr-1" />
-                Great work — you’re ready for the next mission!
-              </p>
-            )}
-          </div>
-        )}
-
         <div className="flex flex-col sm:flex-row flex-wrap items-center justify-between gap-3 pt-4 border-t-2 border-[#2a4938]">
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <button
@@ -338,12 +287,11 @@ export const MissionCompleteModal: React.FC<MissionCompleteModalProps> = ({
 
             {!isMission2 && !isMission3 && onContinueToMission2 && (
               <button
-                disabled={isMission1 && !mission1CheckComplete}
                 onClick={() => {
                   sounds.playObjectiveStinger();
                   onContinueToMission2();
                 }}
-                className={`pixel-btn px-5 py-3 font-title text-[10px] flex items-center justify-center gap-2 ${isMission1 && !mission1CheckComplete ? 'bg-slate-700 text-slate-400 cursor-not-allowed' : 'bg-cyan-500 hover:bg-cyan-400 text-black cursor-pointer'}`}
+                className="pixel-btn px-5 py-3 bg-cyan-500 hover:bg-cyan-400 text-black font-title text-[10px] flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>Play Mission 2!</span>
                 <PixelIcon name="arrowRight" className="w-4 h-4" />

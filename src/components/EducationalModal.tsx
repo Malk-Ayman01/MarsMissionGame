@@ -67,7 +67,7 @@ export const EducationalModal: React.FC<EducationalModalProps> = ({
         </div>
 
         <div className="mt-4 p-3.5 bg-[#1a100e] border-2 border-[#49302b]">
-          <p className="font-mono-hud text-xs sm:text-sm text-slate-100 leading-relaxed whitespace-pre-line">
+          <p className="font-mono-hud text-xs sm:text-sm text-slate-100 leading-relaxed">
             {fact.nasaFact}
           </p>
           <p className="mt-2 pt-2 border-t-2 border-[#49302b] font-mono-hud text-xs text-amber-300 leading-relaxed">
